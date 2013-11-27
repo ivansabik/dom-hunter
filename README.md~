@@ -7,6 +7,4 @@ API Hunter allows to specify different fields (pray characteristics) that will t
 The general flow that makes the magic in API Hunter is:
 
 -Make an HTTP request to an specified URL (has support to include headers in the request as if it was a browser from different devices, Operative Systems or send directly custom headers)
--Parse the DOM using regular expressions
--Populate specified class or a generic object
-
+-
