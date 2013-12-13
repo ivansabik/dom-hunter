@@ -1,0 +1,3 @@
+<?php
+// String con REGEXp
+?>

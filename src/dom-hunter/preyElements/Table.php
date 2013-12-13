@@ -1,4 +1,4 @@
-<?
+<?php
 /* table
  -rows
  -columns
@@ -6,6 +6,6 @@
  -id
  -skip rows
  * 
- * -COmpleja como para Transito DF y Estafeta
+ * -Compleja como para Transito DF y Estafeta
  */
 ?>
