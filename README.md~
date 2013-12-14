@@ -16,21 +16,21 @@ Ejemplo aplicable a Estafeta (outputEstafeta.md)
 
 <pre>
 $hunter = new DOMHunter();
-$hunter->target = 'http://rastreo3.estafeta.com/RastreoWebInternet/consultaEnvio.do';
-$hunter->requestType = 'POST';
+$hunter->strObjetivo = 'http://rastreo3.estafeta.com/RastreoWebInternet/consultaEnvio.do';
+$hunter->boolPost = 1;
 $hunter->params = array('tipoGuia' => 'REFERENCE', 'guias' => '2715597604');
 
 $arrayPresas = array();
-$arrayPresas[] = array('numero_guia', new UniqueId(10, 'int')); // Número de guía
-$arrayPresas[] = array('codigo_rastreo', new UniqueId(20, 'int'); // Código de rastreo
-$arrayPresas[] = array('origen', new Keyword('zona '); // Origen
-$arrayPresas[] = array('cp_destino', new UniqueId(4, int); // CP Destino
-$arrayPresas[] = array('servicio', new OptionSet(array('Entrega garantizada al segundo día hábil','Entrega garantizada al tercer día hábil')); // Servicio
-$arrayPresas[] = array('estatus', new OptionSet(array('ENTREGADO')); // Estatus
-$arrayPresas[] = array('fecha_entrega', new PreyDate('dd/mm/yyyy hh:mm AMPM'); // Fecha y Hora de entrega
-$arrayPresas[] = array('tipo_envio', new OptionSet(array('PAQUETE')); // Tipo de envío
+$arrayPresas[] = array('numero_guia', new IdUnico(10, 'int')); // Número de guía
+$arrayPresas[] = array('codigo_rastreo', new IdUnico(20, 'int'); // Código de rastreo
+$arrayPresas[] = array('origen', new PalabraClave('zona '); // Origen
+$arrayPresas[] = array('cp_destino', new IdUnico(4, int); // CP Destino
+$arrayPresas[] = array('servicio', new ListaOpciones(array('Entrega garantizada al segundo día hábil','Entrega garantizada al tercer día hábil')); // Servicio
+$arrayPresas[] = array('estatus', new ListaOpciones(array('ENTREGADO')); // Estatus
+$arrayPresas[] = array('fecha_entrega', new Fecha('dd/mm/yyyy hh:mm AMPM'); // Fecha y Hora de entrega
+$arrayPresas[] = array('tipo_envio', new ListaOpciones(array('PAQUETE')); // Tipo de envío
 
-$hunter.addPreyElements($arrayPresas);
+$hunter->presas = $arrayPresas;
 
 $resultados = $hunter.hunt();
 
@@ -57,27 +57,22 @@ Regexp
 
 
 
-PreyDate
+Fecha
 -----------
 
 
 
-CSSProperty
+IdUnico
 -----------
 
 
 
-UniqueId
+Imagen
 -----------
 
 
 
-Image
------------
-
-
-
-Keyword
+PalabraClave
 -----------
 
 
@@ -87,10 +82,10 @@ Link
 
 
 
-OptionSet
+ListaOpciones
 -----------
 
 
 
-Table
+Tabla
 -----------
