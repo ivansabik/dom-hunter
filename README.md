@@ -1,9 +1,9 @@
 DOM Hunter
 ===
 
-Toolkit to crawl the Document Object Model (DOM) of static pages obtained via HTTP requests and work with native PHP objects. This is mainly intended for creating custom APIs. The way it works:
+Librería de PHP para parsear un Document Object Model (DOM) de HTML obtenido de peticiones HTTP. Ayuda a construir APIs a partir de aplicaciones web existentes pero seguramente le pueden encontrar algún otro uso interesante.
 
-DOM Hunter allows to specify different fields (pray characteristics) that will then be hunted thru the DOM jungle. DOM Hunter has a repository of different data fields that could typically appear in a DOM from an HTML file and then uses regular expressions to search for them. API Hunter then returns an object with the results according to a specified class or just a simple generic PHP object.
+DOM Hunter permite especificar distintas "presas" que será cazadas en una URL destino. La librería contiene un repositorio de características que típicamente querrían encontrarse en una respuesta HTML para construir APIs (fechas, identificadores, palabras clave, etc). DOM Hunter hace uso de la navegación del DOM y expresiones regulares para cazar las presas. Así funciona:
 
  1. El usuario crea una instancia de DOMHunter indicando las opciones adicionales como headers, emular un browser/dispositivo, petición POST/GET, etc.
  2. Se agregan los elementos a buscar (las presas) a la instancia de DOMHunter.
@@ -12,7 +12,7 @@ DOM Hunter allows to specify different fields (pray characteristics) that will t
  5. Se obtiene un objeto genérico o la clase especificada con los resultados :-)
 
 
-Ejemplo aplicable a Estafeta
+Ejemplo aplicable a Estafeta (outputEstafeta.md)
 
 <pre>
 $hunter = new DOMHunter();
@@ -23,7 +23,7 @@ $hunter->params = array('tipoGuia' => 'REFERENCE', 'guias' => '2715597604');
 $arrayPresas = array();
 $arrayPresas[] = array('numero_guia', new UniqueId(10, 'int')); // Número de guía
 $arrayPresas[] = array('codigo_rastreo', new UniqueId(20, 'int'); // Código de rastreo
-$arrayPresas[] = array('origen', new Regexp('zona '); // Origen
+$arrayPresas[] = array('origen', new Keyword('zona '); // Origen
 $arrayPresas[] = array('cp_destino', new UniqueId(4, int); // CP Destino
 $arrayPresas[] = array('servicio', new OptionSet(array('Entrega garantizada al segundo día hábil','Entrega garantizada al tercer día hábil')); // Servicio
 $arrayPresas[] = array('estatus', new OptionSet(array('ENTREGADO')); // Estatus
@@ -49,7 +49,7 @@ Estafeta
 Correos de México
 Tránsito del DF
 
-En los archivos <pre>output...</pre> están los headers HTTP completos de las peticiones para cuando se tenga que emular otro dispositivo, enviar cookies y otras truculencias headeriles.
+En los archivos <pre>doc/output[NOMBRE_SERVICIO].md</pre> están los headers HTTP completos de las peticiones para cuando se tenga que emular otro dispositivo, enviar cookies y otras truculencias headeriles.
 
 
 Regexp
@@ -62,7 +62,7 @@ PreyDate
 
 
 
-TextNode
+CSSProperty
 -----------
 
 
@@ -77,7 +77,7 @@ Image
 
 
 
-Keywords
+Keyword
 -----------
 
 
