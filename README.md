@@ -7,14 +7,14 @@ DOM Hunter permite especificar distintas "presas" que será cazadas en una URL d
 
  1. El usuario crea una instancia de DOMHunter indicando las opciones adicionales como headers, emular un browser/dispositivo, petición POST/GET, etc.
  2. Se agregan los elementos a buscar (las presas) a la instancia de DOMHunter.
- 3. Se llama el método hunt(), se puede indicar la clase a poblar con los resultados, ej hunt('ClasePHPParaResultados').
+ 3. Se llama el método `hunt()`, se puede indicar la clase a poblar con los resultados, ej hunt('ClasePHPParaResultados').
  4. La librería hace una petición cURL al objetivo y limpia el DOM, después lo distribuye a objetos para que busquen las presas.
  5. Se obtiene un objeto genérico o la clase especificada con los resultados :-)
 
 
 Ejemplo aplicable a Estafeta (outputEstafeta.md)
 
-<pre>
+```php
 $hunter = new DOMHunter();
 $hunter->strObjetivo = 'http://rastreo3.estafeta.com/RastreoWebInternet/consultaEnvio.do';
 $hunter->boolPost = 1;
@@ -32,13 +32,13 @@ $arrayPresas[] = array('tipo_envio', new ListaOpciones(array('PAQUETE')); // Tip
 
 $hunter->presas = $arrayPresas;
 
-$resultados = $hunter.hunt();
+$resultados = $hunter->hunt();
+```
 
 Ejemplo aplicable a Tránsito DF (Infracciones)
 
 Ejemplo aplicable a AICM
 
-</pre>
 
 Outputs para pruebas
 ===
@@ -49,7 +49,7 @@ Estafeta
 Correos de México
 Tránsito del DF
 
-En los archivos <pre>doc/output[NOMBRE_SERVICIO].md</pre> están los headers HTTP completos de las peticiones para cuando se tenga que emular otro dispositivo, enviar cookies y otras truculencias headeriles.
+En los archivos `doc/output[NOMBRE_SERVICIO].md` están los headers HTTP completos de las peticiones para cuando se tenga que emular otro dispositivo, enviar cookies y otras truculencias headeriles.
 
 
 Regexp
