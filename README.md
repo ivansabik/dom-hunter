@@ -1,13 +1,12 @@
 DOM Hunter
 ===
-
 Librería de PHP para parsear un Document Object Model (DOM) de HTML obtenido de peticiones HTTP. Ayuda a construir APIs a partir de aplicaciones web existentes pero seguramente le pueden encontrar algún otro uso interesante.
 
 DOM Hunter permite especificar distintas "presas" que será cazadas en una URL destino. La librería contiene un repositorio de características que típicamente querrían encontrarse en una respuesta HTML para construir APIs (fechas, identificadores, palabras clave, etc). DOM Hunter hace uso de la navegación del DOM y expresiones regulares para cazar las presas. Así funciona:
 
  1. El usuario crea una instancia de DOMHunter indicando las opciones adicionales como headers, emular un browser/dispositivo, petición POST/GET, etc.
  2. Se agregan los elementos a buscar (las presas) a la instancia de DOMHunter.
- 3. Se llama el método `hunt()`, se puede indicar la clase a poblar con los resultados, ej hunt('ClasePHPParaResultados').
+ 3. Se llama el método `hunt()`, se puede indicar la clase a poblar con los resultados, ej `hunt('ClasePHPParaResultados')`.
  4. La librería hace una petición cURL al objetivo y limpia el DOM, después lo distribuye a objetos para que busquen las presas.
  5. Se obtiene un objeto genérico o la clase especificada con los resultados :-)
 
@@ -45,9 +44,11 @@ Outputs para pruebas
 
 Aquí están las respuestas de los servicios que nos interesan para construir APIs externas. Probamos con las siguientes apps:
 
-Estafeta
-Correos de México
-Tránsito del DF
+-Estafeta
+-Correos de México
+-Tránsito del DF
+-Aeropuerto del DF
+-Portal Obligaciones Transparencia del IFAI
 
 En los archivos `doc/output[NOMBRE_SERVICIO].md` están los headers HTTP completos de las peticiones para cuando se tenga que emular otro dispositivo, enviar cookies y otras truculencias headeriles.
 
@@ -89,3 +90,7 @@ ListaOpciones
 
 Tabla
 -----------
+
+TODO
+-----------
+-Validar con Valitron (https://github.com/vlucas/valitron)

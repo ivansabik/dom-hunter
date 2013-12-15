@@ -3,46 +3,20 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9d4bffe069343499e8c479f5c5a80af9",
+    "hash": "a0b74892c8510c2e3be3be8f5765ea14",
     "packages": [
         {
-            "name": "lib/curl",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/andrefigueira/cURL-PHP-Wrapper.git",
-                "reference": "0e32cd7ea38419e8030d65b415a45c3106c1bb3a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/andrefigueira/cURL-PHP-Wrapper/zipball/0e32cd7ea38419e8030d65b415a45c3106c1bb3a",
-                "reference": "0e32cd7ea38419e8030d65b415a45c3106c1bb3a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Curl": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-11-23 13:38:47"
-        },
-        {
             "name": "sunra/php-simple-html-dom-parser",
-            "version": "1.5.0.x-dev",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sunra/php-simple-html-dom-parser.git",
-                "reference": "691f701e814302deabb1c721fed7c05663704fa8"
+                "reference": "a0b80ace086c7e09085669205e1b3c2c9c7a453c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sunra/php-simple-html-dom-parser/zipball/691f701e814302deabb1c721fed7c05663704fa8",
-                "reference": "691f701e814302deabb1c721fed7c05663704fa8",
+                "url": "https://api.github.com/repos/sunra/php-simple-html-dom-parser/zipball/a0b80ace086c7e09085669205e1b3c2c9c7a453c",
+                "reference": "a0b80ace086c7e09085669205e1b3c2c9c7a453c",
                 "shasum": ""
             },
             "require": {
@@ -60,7 +34,7 @@
             ],
             "authors": [
                 {
-                    "name": "Sunra",
+                    "name": "sunra",
                     "email": "sunra@yandex.ru",
                     "homepage": "https://github.com/sunra"
                 }
@@ -72,7 +46,7 @@
                 "html",
                 "parser"
             ],
-            "time": "2013-05-04 19:23:02"
+            "time": "2013-05-04 14:32:03"
         }
     ],
     "packages-dev": [
@@ -82,10 +56,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "lib/curl": 20,
-        "sunra/php-simple-html-dom-parser": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": [
 
     ],
