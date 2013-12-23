@@ -1,6 +1,6 @@
 <?php
 
-class Imagen implements Presa {
+class Imagen extends Presa {
 // Extension
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-class Link implements Presa {
+class Link extends Presa {
     
 }
 

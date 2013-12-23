@@ -1,6 +1,6 @@
 <?php
 
-require '../../../vendor/autoload.php';
+require '../vendor/autoload.php';
 
 use Sunra\PhpSimple\HtmlDomParser;
 
@@ -17,18 +17,19 @@ class DOMHunter {
     public $strSemillaBusqueda;
     public $domRespuesta;
     public $arrPresas;
-    private $settableVars;
-    private static $arrDispositivos = array('desktop', 'movil');
-    private static $arrOss = array('win', 'ubuntu', 'osx');
-    private static $arrNavegadores = array('ie', 'chrome', 'firefox', 'safari');
+    private $_settableVars;
+    private $_arrTextNodes;
+    private static $_arrDispositivos = array('desktop', 'movil');
+    private static $_arrOss = array('win', 'ubuntu', 'osx');
+    private static $_arrNavegadores = array('ie', 'chrome', 'firefox', 'safari');
 
     public function __construct($strUrlObjetivo = '', $boolPost = 0) {
         $this->strUrlObjetivo = $strUrlObjetivo;
         $this->boolPost = $boolPost;
-        $this->settableVars = array_keys(get_object_vars($this));
+        $this->_settableVars = array_keys(get_object_vars($this));
     }
 
-    public function hunt() {
+    public function hunt($strClaseObjetivo = null) {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $this->strUrlObjetivo);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -53,7 +54,22 @@ class DOMHunter {
         $this->domRespuesta = HtmlDomParser::str_get_html($this->domRespuesta);
         $this->domRespuesta = $this->domRespuesta->find($this->strSemillaBusqueda);
         $this->domRespuesta = $this->domRespuesta[0];
+        $this->_findTextNodes();
         curl_close($curl);
+
+        // Recorre presas y guarda resultados
+        if ($strClaseObjetivo) {
+            $resultados = new $strClaseObjetivo();
+        } else {
+            $resultados = new Object();
+        }
+        foreach ($this->arrPresas as $presa) {
+            $presa->arrTextNodes($this->_arrTextNodes);
+            $resultado = $presa->busca();
+            if ($resultado) {
+                $resultados->$presa->atributoResultado = $resultado;
+            }
+        }
     }
 
     /**
@@ -71,7 +87,7 @@ class DOMHunter {
      * @author Rob
      * */
     public function __call($method, $args) {
-        if (in_array($method, $this->settableVars)) {
+        if (in_array($method, $this->_settableVars)) {
             if (count($args) === 0) {
                 return $this->$method;
             }
@@ -86,6 +102,14 @@ class DOMHunter {
     // como AICM porque ése sería agregar una Presa de tipo Tabla
     public function huntMuchos() {
         
+    }
+
+    private function _findTextNodes() {
+        $this->_arrTextNodes = array();
+        $arrTextNodes = $this->domRespuesta->find('text');
+        foreach ($arrTextNodes as $textNode) {
+            $this->_arrTextNodes[] = $textNode->plaintext;
+        }
     }
 
 }

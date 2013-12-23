@@ -1,6 +1,6 @@
 <?php
 
-class Regexp implements Presa {
+class Regexp extends Presa {
 // String con REGEXp
 }
 ?>

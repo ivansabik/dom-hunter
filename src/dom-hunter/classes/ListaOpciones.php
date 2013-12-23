@@ -1,6 +1,6 @@
 <?php
 
-class ListaOpciones implements Presa {
+class ListaOpciones extends Presa {
     
 }
 

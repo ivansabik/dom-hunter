@@ -5,7 +5,7 @@
  *
  * @author ivansabik
  */
-class Fecha implements Presa {
+class Fecha extends Presa {
 
     private static $formatosValidos = array('dd/mm/yyyy hh:mm AM/PM', 'yyyy-mm-dd');
     

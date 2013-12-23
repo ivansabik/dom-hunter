@@ -1,6 +1,6 @@
 <?php
 
-class NodoDom implements Presa {
+class NodoDom extends Presa {
     /*
       -node id
       -node class name

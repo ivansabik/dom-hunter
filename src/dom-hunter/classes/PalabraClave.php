@@ -1,6 +1,6 @@
 <?php
 
-class PalabraClave implements Presa {
+class PalabraClave extends Presa {
     
 }
 

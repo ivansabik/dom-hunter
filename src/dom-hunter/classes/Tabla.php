@@ -1,6 +1,6 @@
 <?php
 
-class Tabla implements Presa {
+class Tabla extends Presa {
     /* table
       -rows
       -columns
