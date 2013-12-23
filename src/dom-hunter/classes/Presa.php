@@ -7,13 +7,12 @@
 class Presa {
 
     public $arrTextNodes;
-    public $params;
-    public $numOcurrencia;
-    public $atributoResultado;
+    public $arrParams;
+    public $intNumOcurrencia;
 
-    public function __construct($params = array(), $numOcurrencia = 1) {
-        $this->params = $params;
-        $this->numOcurrencia = $numOcurrencia;
+    public function __construct($arrParams = array(), $intNumOcurrencia = 1) {
+        $this->arrParams = $arrParams;
+        $this->intNumOcurrencia = $intNumOcurrencia;
     }
 
     public function __call($method, $args) {

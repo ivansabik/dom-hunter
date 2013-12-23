@@ -19,9 +19,9 @@ class DOMHunter {
     public $arrPresas;
     private $_settableVars;
     private $_arrTextNodes;
-    private static $_arrDispositivos = array('desktop', 'movil');
-    private static $_arrOss = array('win', 'ubuntu', 'osx');
-    private static $_arrNavegadores = array('ie', 'chrome', 'firefox', 'safari');
+    private static $_arrDispositivos = array('desktop' => '',
+        'movil' => ''
+    );
 
     public function __construct($strUrlObjetivo = '', $boolPost = 0) {
         $this->strUrlObjetivo = $strUrlObjetivo;
@@ -61,13 +61,17 @@ class DOMHunter {
         if ($strClaseObjetivo) {
             $resultados = new $strClaseObjetivo();
         } else {
-            $resultados = new Object();
+            $resultados = new stdClass();
         }
-        foreach ($this->arrPresas as $presa) {
+        foreach ($this->arrPresas as $arrNombreResultadoPresa) {
+            $strNombreResultado = $arrNombreResultadoPresa[0];
+            $presa = $arrNombreResultadoPresa[1];
+
             $presa->arrTextNodes($this->_arrTextNodes);
+
             $resultado = $presa->busca();
             if ($resultado) {
-                $resultados->$presa->atributoResultado = $resultado;
+                $resultados->$strNombreResultado = $resultado;
             }
         }
     }

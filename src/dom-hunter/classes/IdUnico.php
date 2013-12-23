@@ -1,6 +1,6 @@
 <?php
 
-class IdUnico extends PResa {
+class IdUnico extends Presa {
     /* identifier
       -length
       -fixed
