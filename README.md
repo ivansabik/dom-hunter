@@ -10,7 +10,8 @@ DOM Hunter permite especificar distintas "presas" que será cazadas en una URL d
  4. La librería hace una petición cURL al objetivo y limpia el DOM, después lo distribuye a objetos para que busquen las presas.
  5. Se obtiene un objeto genérico o la clase especificada con los resultados :-)
 
-
+DOM Hunter no es un web scrapper, realiza brute-force sobre todos los nodos Text del DOM haciendo uso de expresiones regulares para encontrar los elementos aunque cambie la estructura del DOM.
+ 
 Ejemplo aplicable a Estafeta (outputEstafeta.md)
 
 ```php
@@ -21,13 +22,13 @@ $hunter->params = array('tipoGuia' => 'REFERENCE', 'guias' => '2715597604');
 
 $arrayPresas = array();
 $arrayPresas[] = array('numero_guia', new IdUnico(10, 'int')); // Número de guía
-$arrayPresas[] = array('codigo_rastreo', new IdUnico(20, 'int'); // Código de rastreo
-$arrayPresas[] = array('origen', new PalabraClave('zona '); // Origen
-$arrayPresas[] = array('cp_destino', new IdUnico(4, int); // CP Destino
-$arrayPresas[] = array('servicio', new ListaOpciones(array('Entrega garantizada al segundo día hábil','Entrega garantizada al tercer día hábil')); // Servicio
-$arrayPresas[] = array('estatus', new ListaOpciones(array('ENTREGADO')); // Estatus
-$arrayPresas[] = array('fecha_entrega', new Fecha('dd/mm/yyyy hh:mm AMPM'); // Fecha y Hora de entrega
-$arrayPresas[] = array('tipo_envio', new ListaOpciones(array('PAQUETE')); // Tipo de envío
+$arrayPresas[] = array('codigo_rastreo', new IdUnico(20, 'int')); // Código de rastreo
+$arrayPresas[] = array('origen', new PalabraClave('zona ')); // Origen
+$arrayPresas[] = array('cp_destino', new IdUnico(4, int)); // CP Destino
+$arrayPresas[] = array('servicio', new ListaOpciones(array('Entrega garantizada al segundo día hábil','Entrega garantizada al tercer día hábil'))); // Servicio
+$arrayPresas[] = array('estatus', new ListaOpciones(array('ENTREGADO'))); // Estatus
+$arrayPresas[] = array('fecha_entrega', new Fecha('dd/mm/yyyy hh:mm AMPM')); // Fecha y Hora de entrega
+$arrayPresas[] = array('tipo_envio', new ListaOpciones(array('PAQUETE'))); // Tipo de envío
 
 $hunter->presas = $arrayPresas;
 
@@ -90,7 +91,3 @@ ListaOpciones
 
 Tabla
 -----------
-
-TODO
------------
--Validar con Valitron (https://github.com/vlucas/valitron)

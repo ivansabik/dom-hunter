@@ -1,2 +1,4 @@
 /vendor/
 /src/dom-hunter/nb/dom-hunter/nbproject/private/
+*.lock
+*~

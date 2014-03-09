@@ -4,9 +4,10 @@ require '../vendor/autoload.php';
 
 use Sunra\PhpSimple\HtmlDomParser;
 
-class DOMHunter {
+class DomHunter {
 
-    public $arrParamsPeticion;
+    // TODO: Manejo de ocurrencias (skip y como las vaya encontrando tambien si no regresa la misma siempre como peso y peso vol. de estafeta) 
+    public $arrParamsPeticion = array();
     public $strUrlObjetivo;
     public $boolPost;
     public $strDispositivo; // Desktop, Mobile
@@ -14,11 +15,11 @@ class DOMHunter {
     public $strNavegador;
     public $strHeadersEnviados;
     public $strHeadersRespuesta;
-    public $strSemillaBusqueda;
+    public $strSemillaBusqueda; // Para acelerar la busqueda si se conoce el nodo DOM base
     public $domRespuesta;
-    public $arrPresas;
+    public $arrPresas = array();
     private $_settableVars;
-    private $_arrTextNodes;
+    public $arrNodosTexto = array();
     private static $_arrDispositivos = array('desktop' => '',
         'movil' => ''
     );
@@ -29,7 +30,8 @@ class DOMHunter {
         $this->_settableVars = array_keys(get_object_vars($this));
     }
 
-    public function hunt($strClaseObjetivo = null) {
+    // Regresa un objeto con los resultados
+    public function hunt() {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $this->strUrlObjetivo);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -52,28 +54,32 @@ class DOMHunter {
         $this->strHeadersRespuesta = substr($strRespuestaCurl, 0, $intHeaderSize);
         $this->domRespuesta = substr($strRespuestaCurl, $intHeaderSize);
         $this->domRespuesta = HtmlDomParser::str_get_html($this->domRespuesta);
-        $this->domRespuesta = $this->domRespuesta->find($this->strSemillaBusqueda);
+        if ($this->strSemillaBusqueda) {
+            $this->domRespuesta = $this->domRespuesta->find($this->strSemillaBusqueda);
+        }
         $this->domRespuesta = $this->domRespuesta[0];
         $this->_findTextNodes();
         curl_close($curl);
-
-        // Recorre presas y guarda resultados
-        if ($strClaseObjetivo) {
-            $resultados = new $strClaseObjetivo();
-        } else {
-            $resultados = new stdClass();
-        }
+        $resultados = array();
         foreach ($this->arrPresas as $arrNombreResultadoPresa) {
             $strNombreResultado = $arrNombreResultadoPresa[0];
             $presa = $arrNombreResultadoPresa[1];
-
-            $presa->arrTextNodes($this->_arrTextNodes);
-
-            $resultado = $presa->busca();
-            if ($resultado) {
-                $resultados->$strNombreResultado = $resultado;
+            // TODO: refactor, muchas condiciones anidadas!
+            // Si no son tablas recorre los nodos texto y llama el duck test
+            if (!$presa instanceof Tabla) {
+                // Aqui deberia ir algo para manejo de ocurrencias
+                foreach ($this->arrNodosTexto as $nodoTexto) {
+                    $pato = $presa->duckTest($nodoTexto);
+                    if ($pato) {
+                        $resultados[$strNombreResultado] = $pato;
+                        break;
+                    }
+                }
+            } else {
+                throw new Exception('Soy una tabla y regreso un array no un string');
             }
         }
+        return $resultados;
     }
 
     /**
@@ -109,10 +115,23 @@ class DOMHunter {
     }
 
     private function _findTextNodes() {
-        $this->_arrTextNodes = array();
         $arrTextNodes = $this->domRespuesta->find('text');
-        foreach ($arrTextNodes as $textNode) {
-            $this->_arrTextNodes[] = $textNode->plaintext;
+        foreach ($arrTextNodes as $nodoTexto) {
+            $strNodoSanitizado = $this->_limpiaStr($nodoTexto->plaintext);
+            if (!empty($strNodoSanitizado)) {
+                $this->arrNodosTexto[] = $strNodoSanitizado;
+            }
+        }
+    }
+
+    // Quita espacios en blanco '', &nbsp; y tags HTML (para cuando el DOM esta jodido,
+    // como en estafeta, regresa tags HTML que no queremos (</tr>, </td>)
+    private function _limpiaStr($in_str) {
+        $cur_encoding = mb_detect_encoding($in_str);
+        if ($cur_encoding == 'UTF-8' && mb_check_encoding($in_str, 'UTF-8')) {
+            return strip_tags(trim(str_replace('&nbsp;', '', $in_str)));
+        } else {
+            return strip_tags(trim(str_replace('&nbsp;', '', utf8_encode($in_str))));
         }
     }
 
