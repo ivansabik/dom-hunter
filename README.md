@@ -1,18 +1,24 @@
 DOM Hunter
 ===
-Librería de PHP para parsear un Document Object Model (DOM) de HTML obtenido de peticiones HTTP. Ayuda a construir APIs a partir de aplicaciones web existentes pero seguramente le pueden encontrar algún otro uso interesante.
+Librería PHP para parsear un Document Object Model (DOM) en busca de objetos. Ayuda a construir APIs a partir de aplicaciones web existentes pero seguramente le pueden encontrar algún otro uso interesante.
 
-DOM Hunter permite especificar distintas "presas" que será cazadas en una URL destino. La librería contiene un repositorio de características que típicamente querrían encontrarse en una respuesta HTML para construir APIs (fechas, identificadores, palabras clave, etc). DOM Hunter hace uso de la navegación del DOM y expresiones regulares para cazar las presas. Así funciona:
+DOM Hunter permite especificar distintas "presas" que será cazadas en una URL o código HTML destino. La librería contiene un repositorio de características que típicamente querrían encontrarse en una respuesta HTML para construir APIs (fechas, identificadores, palabras clave, etc). DOM Hunter hace uso de la navegación del DOM y expresiones regulares para cazar las presas. Así funciona:
 
  1. El usuario crea una instancia de DOMHunter indicando las opciones adicionales como headers, emular un browser/dispositivo, petición POST/GET, etc.
  2. Se agregan los elementos a buscar (las presas) a la instancia de DOMHunter.
- 3. Se llama el método `hunt()`, se puede indicar la clase a poblar con los resultados, ej `hunt('ClasePHPParaResultados')`.
- 4. La librería hace una petición cURL al objetivo y limpia el DOM, después lo distribuye a objetos para que busquen las presas.
- 5. Se obtiene un objeto genérico o la clase especificada con los resultados :-)
+ 3. Se llama el método `hunt()`.
+ 4. La librería hace una petición cURL al objetivo (o se puede settear directamente un string con el HTML) y limpia el DOM, después lo distribuye a objetos para que busquen las presas.
+ 5. Se obtiene un array con los resultados en los índices especificados.
 
 DOM Hunter no es un web scrapper, realiza brute-force sobre todos los nodos Text del DOM haciendo uso de expresiones regulares para encontrar los elementos aunque cambie la estructura del DOM.
  
-Ejemplo aplicable a Estafeta (outputEstafeta.md)
+## Presas (objetos que encuentra)
+
+- KeyValue
+- IdUnico
+- NodoDom
+
+### Ejemplo aplicable a Estafeta
 
 ```php
 $hunter = new DOMHunter();
@@ -38,60 +44,21 @@ $arrayPresas[] = array('recibio', new KeyValue('recibio'));
 $hunter->arrPresas($arrayPresas);
 $resultados = $hunter->hunt(); // Arreglo con los resultados
 ```
+### Ejemplo aplicable a Correos de México
+### Ejemplo aplicable a Tránsito DF (Infracciones)
+### Ejemplo aplicable a AICM
+### Ejemplo aplicable a Obligaciones IFAI (Contratos)
+### Ejemplo aplicable a ADN Político
 
-Ejemplo aplicable a Tránsito DF (Infracciones)
+## Pruebas
 
-Ejemplo aplicable a AICM
-
-
-Outputs para pruebas
-===
-
-Aquí están las respuestas de los servicios que nos interesan para construir APIs externas. Probamos con las siguientes apps:
+Tanto para hacer las peticiones como para parsear los resultados, Dom Hunter basa sus pruebas en las siguientes apps:
 
 - Estafeta
 - Correos de México
 - Tránsito del DF
 - Aeropuerto del DF
 - Portal Obligaciones Transparencia del IFAI
+- ADN Político
 
 En los archivos `doc/output[NOMBRE_SERVICIO].md` están los headers HTTP completos de las peticiones para cuando se tenga que emular otro dispositivo, enviar cookies y otras truculencias headeriles.
-
-
-Regexp
------------
-
-
-
-Fecha
------------
-
-
-
-IdUnico
------------
-
-
-
-Imagen
------------
-
-
-
-PalabraClave
------------
-
-
-
-Link
------------
-
-
-
-ListaOpciones
------------
-
-
-
-Tabla
------------
