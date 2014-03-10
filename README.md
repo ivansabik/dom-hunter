@@ -19,20 +19,24 @@ $hunter = new DOMHunter();
 $hunter->strObjetivo = 'http://rastreo3.estafeta.com/RastreoWebInternet/consultaEnvio.do';
 $hunter->boolPost = 1;
 $hunter->params = array('tipoGuia' => 'REFERENCE', 'guias' => '2715597604');
-
 $arrayPresas = array();
-$arrayPresas[] = array('numero_guia', new IdUnico(10, 'int')); // Número de guía
-$arrayPresas[] = array('codigo_rastreo', new IdUnico(20, 'int')); // Código de rastreo
-$arrayPresas[] = array('origen', new PalabraClave('zona ')); // Origen
-$arrayPresas[] = array('cp_destino', new IdUnico(4, int)); // CP Destino
-$arrayPresas[] = array('servicio', new ListaOpciones(array('Entrega garantizada al segundo día hábil','Entrega garantizada al tercer día hábil'))); // Servicio
-$arrayPresas[] = array('estatus', new ListaOpciones(array('ENTREGADO'))); // Estatus
-$arrayPresas[] = array('fecha_entrega', new Fecha('dd/mm/yyyy hh:mm AMPM')); // Fecha y Hora de entrega
-$arrayPresas[] = array('tipo_envio', new ListaOpciones(array('PAQUETE'))); // Tipo de envío
-
-$hunter->presas = $arrayPresas;
-
-$resultados = $hunter->hunt();
+$arrayPresas[] = array('numero_guia', new KeyValue('numero de guia'));
+$arrayPresas[] = array('codigo_rastreo', new KeyValue('codigo de rastreo'));
+$arrayPresas[] = array('origen', new KeyValue('origen'));
+$arrayPresas[] = array('destino', new KeyValue('destino', TRUE, TRUE));
+$arrayPresas[] = array('cp_destino', new IdUnico(5, 'num'));
+$arrayPresas[] = array('servicio', new KeyValue('entrega garantizada', FALSE));
+$arrayPresas[] = array('estatus', new NodoDom('.respuestasazul', 'plaintext', 1));
+$arrayPresas[] = array('fecha_recoleccion', new KeyValue('fecha de recoleccion'));
+$arrayPresas[] = array('fecha_programada', new KeyValue('de entrega', TRUE, TRUE));
+$arrayPresas[] = array('fecha_entrega', new KeyValue('Fecha y hora de entrega'));
+$arrayPresas[] = array('tipo_envio', new KeyValue('tipo de envio'));
+$arrayPresas[] = array('peso', new KeyValue('Peso kg'));
+$arrayPresas[] = array('peso_vol', new KeyValue('Peso volumétrico kg'));
+//$arrayPresas[] = array('firma_recibido', new NodoDom('img', 'src', 4));
+$arrayPresas[] = array('recibio', new KeyValue('recibio'));
+$hunter->arrPresas($arrayPresas);
+$resultados = $hunter->hunt(); // Arreglo con los resultados
 ```
 
 Ejemplo aplicable a Tránsito DF (Infracciones)
@@ -45,11 +49,11 @@ Outputs para pruebas
 
 Aquí están las respuestas de los servicios que nos interesan para construir APIs externas. Probamos con las siguientes apps:
 
--Estafeta
--Correos de México
--Tránsito del DF
--Aeropuerto del DF
--Portal Obligaciones Transparencia del IFAI
+- Estafeta
+- Correos de México
+- Tránsito del DF
+- Aeropuerto del DF
+- Portal Obligaciones Transparencia del IFAI
 
 En los archivos `doc/output[NOMBRE_SERVICIO].md` están los headers HTTP completos de las peticiones para cuando se tenga que emular otro dispositivo, enviar cookies y otras truculencias headeriles.
 

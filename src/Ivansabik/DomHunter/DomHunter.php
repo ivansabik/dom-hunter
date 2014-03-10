@@ -1,6 +1,15 @@
 <?php
 
+// Status, que funciona
+// Construccion de DOMHunter
+// IdUnico
+// TODO: refactor para usar namespaces PSR-0 (definir, quitar requires, usar "use")
+// TODO: refactor, muchas condiciones anidadas!
+
 require '../vendor/autoload.php';
+require_once 'clases/IdUnico.php';
+require_once 'clases/KeyValue.php';
+require_once 'clases/NodoDom.php';
 
 use Sunra\PhpSimple\HtmlDomParser;
 
@@ -16,15 +25,16 @@ class DomHunter {
     public $strHeadersEnviados;
     public $strHeadersRespuesta;
     public $strSemillaBusqueda; // Para acelerar la busqueda si se conoce el nodo DOM base
+    public $strHtmlObjetivo;
     public $domRespuesta;
     public $arrPresas = array();
     private $_settableVars;
-    public $arrNodosTexto = array();
+    public $arrNodosTexto;
     private static $_arrDispositivos = array('desktop' => '',
         'movil' => ''
     );
 
-    public function __construct($strUrlObjetivo = '', $boolPost = 0) {
+    public function __construct($strUrlObjetivo = '', $boolPost = FALSE) {
         $this->strUrlObjetivo = $strUrlObjetivo;
         $this->boolPost = $boolPost;
         $this->_settableVars = array_keys(get_object_vars($this));
@@ -32,51 +42,67 @@ class DomHunter {
 
     // Regresa un objeto con los resultados
     public function hunt() {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $this->strUrlObjetivo);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_VERBOSE, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 1);
-        // Si la petición es GET, construye URL con params, si es post hay adicionales pal cURL
-        if (!$this->boolPost) {
-            if ($this->arrParamsPeticion) {
-                $strParamsHttp = http_build_query($this->arrParamsPeticion);
-                $this->strUrlObjetivo .= '?' . $strParamsHttp;
+        // URL objetivo, hay que ir a buscURLa
+        if ($this->strUrlObjetivo) {
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $this->strUrlObjetivo);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
+            curl_setopt($curl, CURLOPT_HEADER, TRUE);
+            // Si la petición es GET, construye URL con params, si es post hay adicionales pal cURL
+            if (!$this->boolPost) {
+                if ($this->arrParamsPeticion) {
+                    $strParamsHttp = http_build_query($this->arrParamsPeticion);
+                    $this->strUrlObjetivo .= '?' . $strParamsHttp;
+                }
             }
+            if ($this->boolPost) {
+                curl_setopt($curl, CURLOPT_POST, TRUE);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $this->arrParamsPeticion);
+            }
+            // Asigna HTML y DOM respuestas de la petición
+            $strRespuestaCurl = curl_exec($curl);
+            $intHeaderSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+            $this->strHeadersRespuesta = substr($strRespuestaCurl, 0, $intHeaderSize);
+            $this->strHtmlObjetivo = substr($strRespuestaCurl, $intHeaderSize);
+            curl_close($curl);
         }
-        if ($this->boolPost) {
-            curl_setopt($curl, CURLOPT_POST, TRUE);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $this->arrParamsPeticion);
-        }
-        // Asigna HTML y DOM respuestas de la petición
-        $strRespuestaCurl = curl_exec($curl);
-        $intHeaderSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-        $this->strHeadersRespuesta = substr($strRespuestaCurl, 0, $intHeaderSize);
-        $this->domRespuesta = substr($strRespuestaCurl, $intHeaderSize);
-        $this->domRespuesta = HtmlDomParser::str_get_html($this->domRespuesta);
+        // Ya con el string del html, viel spass
+        $this->domRespuesta = HtmlDomParser::str_get_html($this->strHtmlObjetivo);
         if ($this->strSemillaBusqueda) {
             $this->domRespuesta = $this->domRespuesta->find($this->strSemillaBusqueda);
+            $this->domRespuesta = $this->domRespuesta[0];
         }
-        $this->domRespuesta = $this->domRespuesta[0];
         $this->_findTextNodes();
-        curl_close($curl);
         $resultados = array();
         foreach ($this->arrPresas as $arrNombreResultadoPresa) {
             $strNombreResultado = $arrNombreResultadoPresa[0];
             $presa = $arrNombreResultadoPresa[1];
-            // TODO: refactor, muchas condiciones anidadas!
-            // Si no son tablas recorre los nodos texto y llama el duck test
-            if (!$presa instanceof Tabla) {
+            $arrElementosEliminar = array();
+            if ($presa instanceof Tabla) {
+                throw new Exception('Soy una tabla y regreso un array no un string');
+            } elseif ($presa instanceof KeyValue) {
+                for ($i = 0; $i < count($this->arrNodosTexto) - 1; $i++) {
+                    $nodoTexto = $this->arrNodosTexto[$i];
+                    $nodoSiguiente = $this->arrNodosTexto[$i + 1];
+                    $pato = $presa->duckTest($nodoTexto, $nodoSiguiente);
+                    if ($pato) {
+                        $resultados[$strNombreResultado] = $pato;
+                    }
+                }
+            } elseif ($presa instanceof NodoDom) {
+                $pato = $presa->duckTest($this->domRespuesta);
+                if ($pato) {
+                    $resultados[$strNombreResultado] = $this->_limpiaStr($pato);
+                }
+            } else {
                 // Aqui deberia ir algo para manejo de ocurrencias
                 foreach ($this->arrNodosTexto as $nodoTexto) {
                     $pato = $presa->duckTest($nodoTexto);
                     if ($pato) {
                         $resultados[$strNombreResultado] = $pato;
-                        break;
                     }
                 }
-            } else {
-                throw new Exception('Soy una tabla y regreso un array no un string');
             }
         }
         return $resultados;
@@ -115,6 +141,7 @@ class DomHunter {
     }
 
     private function _findTextNodes() {
+        $this->arrNodosTexto = array();
         $arrTextNodes = $this->domRespuesta->find('text');
         foreach ($arrTextNodes as $nodoTexto) {
             $strNodoSanitizado = $this->_limpiaStr($nodoTexto->plaintext);

@@ -1,5 +1,5 @@
 <?php
-
+require_once '../src/Ivansabik/DomHunter/DomHunter.php';
 /**
  * Prueba la clase IDUnico
  *
@@ -8,15 +8,15 @@
 class IdUnicoTest extends PHPUnit_Framework_TestCase {
 
     public function testNumerico() {
-        $this->assertTrue('', '');
+        $this->markTestIncomplete('testNumerico() no esta definido');
     }
     
     public function testAlpha() {
-        $this->assertTrue('', '');
+        $this->markTestIncomplete('testAlpha() no esta definido');
     }
     
     public function testAlphanumerico() {
-        $this->assertTrue('', '');
+        $this->markTestIncomplete('testAlphanumerico() no esta definido');
     }
 
 }
