@@ -10,6 +10,7 @@ require '../vendor/autoload.php';
 require_once 'clases/IdUnico.php';
 require_once 'clases/KeyValue.php';
 require_once 'clases/NodoDom.php';
+require_once 'clases/Tabla.php';
 
 use Sunra\PhpSimple\HtmlDomParser;
 
@@ -80,7 +81,7 @@ class DomHunter {
             $presa = $arrNombreResultadoPresa[1];
             $arrElementosEliminar = array();
             if ($presa instanceof Tabla) {
-                throw new Exception('Soy una tabla y regreso un array no un string');
+                $resultados[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
             } elseif ($presa instanceof KeyValue) {
                 for ($i = 0; $i < count($this->arrNodosTexto) - 1; $i++) {
                     $nodoTexto = $this->arrNodosTexto[$i];
@@ -94,6 +95,8 @@ class DomHunter {
                 $pato = $presa->duckTest($this->domRespuesta);
                 if ($pato) {
                     $resultados[$strNombreResultado] = $this->_limpiaStr($pato);
+                } else {
+                    $resultados[$strNombreResultado] = '';
                 }
             } else {
                 // Aqui deberia ir algo para manejo de ocurrencias
@@ -153,12 +156,12 @@ class DomHunter {
 
     // Quita espacios en blanco '', &nbsp; y tags HTML (para cuando el DOM esta jodido,
     // como en estafeta, regresa tags HTML que no queremos (</tr>, </td>)
-    private function _limpiaStr($in_str) {
-        $cur_encoding = mb_detect_encoding($in_str);
-        if ($cur_encoding == 'UTF-8' && mb_check_encoding($in_str, 'UTF-8')) {
-            return strip_tags(trim(str_replace('&nbsp;', '', $in_str)));
+    protected static function _limpiaStr($strTexto) {
+        $cur_encoding = mb_detect_encoding($strTexto);
+        if ($cur_encoding == 'UTF-8' && mb_check_encoding($strTexto, 'UTF-8')) {
+            return strip_tags(trim(str_replace('&nbsp;', '', $strTexto)));
         } else {
-            return strip_tags(trim(str_replace('&nbsp;', '', utf8_encode($in_str))));
+            return strip_tags(trim(str_replace('&nbsp;', '', utf8_encode($strTexto))));
         }
     }
 

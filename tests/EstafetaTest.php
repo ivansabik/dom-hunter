@@ -31,7 +31,27 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
                     'recibio' => 'PDV2:LASCAREZ MARTINEZ ENRIQUE',
                     'firma_recibido' => '',
                     'peso' => '0.2',
-                    'peso_vol' => '0.0'
+                    'peso_vol' => '0.0',
+                    'historial' => array(
+                        array('28/11/2013 02:30 PM', 'Recolección en oficina por ruta local', ''),
+                        array('28/11/2013 12:19 PM', 'Envío recibido en oficina', 'Envío ocurre direccionado a oficina'),
+                        array('27/11/2013 07:18 PM', 'Carga Aerea AER Aclaración en proceso', 'Comunicarse al 01800 3782 338'),
+                        array('27/11/2013 04:18 PM', 'Envío recibido en oficina', 'Envío ocurre direccionado a oficina'),
+                        array('27/11/2013 09:19 AM', 'Estación Aérea MEX En proceso de entrega Av Central 161 Impulsora Popular Avicola Nezahualcoyotl', 'Envío ocurre direccionado a oficina'),
+                        array('27/11/2013 07:24 AM', 'Estación Aérea MEX Llegada a centro de distribución AMX Estación Aérea MEX', ''),
+                        array('26/11/2013 07:05 PM', 'MEXICO D.F. En ruta foránea hacia MX2-México (zona 2)', ''),
+                        array('26/11/2013 07:03 PM', 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', ''),
+                        array('26/11/2013 06:55 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Envío en proceso de entrega'),
+                        array('26/11/2013 06:55 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Recibe el área de Operaciones'),
+                        array('26/11/2013 03:17 PM', 'MEXICO D.F. Aclaración en proceso', 'Reporte generado por el cliente'),
+                        array('23/11/2013 10:42 AM', 'MEXICO D.F. Movimiento Local', 'Auditoria a ruta local'),
+                        array('22/11/2013 12:00 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Entrada a Control de Envíos'),
+                        array('22/11/2013 11:33 AM', 'MEXICO D.F. Movimiento Local', 'Entrega en Zona de Alto Riesgo y/o de difícil acceso'),
+                        array('22/11/2013 11:05 AM', 'MEXICO D.F. Movimiento en centro de distribución', 'Posible demora en la entrega por mal empaque'),
+                        array('22/11/2013 10:58 AM', 'MEXICO D.F. Movimiento Local', 'Entrega en Zona de Alto Riesgo y/o de difícil acceso'),
+                        array('21/11/2013 07:00 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Envío pendiente de salida a ruta local'),
+                        array('21/11/2013 06:56 PM', 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', ''),
+                    )
                 )
             ),
             array(
@@ -51,7 +71,18 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
                     'recibio' => 'SDR:RAUL MARTIN',
                     'firma_recibido' => '/RastreoWebInternet/firmaServlet?guia=8055241528464720115088&idioma=es',
                     'peso' => '0.7',
-                    'peso_vol' => '1.9'
+                    'peso_vol' => '1.9',
+                    'historial' => array(
+                        array('26/11/2013 02:31 PM', 'MEXICO D.F. Aclaración en proceso', 'Comunicarse al 01800 3782 338'),
+                        array('26/11/2013 10:49 AM', 'MEXICO D.F. Aclaración en proceso', 'Reporte generado por el cliente'),
+                        array('31/10/2013 10:04 AM', 'Recolección en oficina por ruta local', ''),
+                        array('31/10/2013 09:12 AM', 'MEXICO D.F. En proceso de entrega MEX MEXICO D.F.', ''),
+                        array('30/10/2013 08:39 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Envío con manejo especial'),
+                        array('30/10/2013 07:52 PM', 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', ''),
+                        array('30/10/2013 06:06 PM', 'Recolección en oficina por ruta local', ''),
+                        array('30/10/2013 06:02 PM', 'Envío recibido en oficina', 'Envío recibido en oficina de Estafeta fuera del horario de recolección'),
+                        array('30/10/2013 02:00 PM', 'Envio recibido en oficina Av Adolfo Lopez Mateos 22 Local 4 Puente de Vigas Tlalnepantla', ''),
+                    ),
                 )
             )
         );
@@ -66,15 +97,15 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
         $arrayPresas[] = array('destino', new KeyValue('destino', TRUE, TRUE));
         $arrayPresas[] = array('cp_destino', new IdUnico(5, 'num'));
         $arrayPresas[] = array('servicio', new KeyValue('entrega garantizada', FALSE));
-        $arrayPresas[] = array('estatus', new NodoDom('.respuestasazul', 'plaintext', 1));
+        $arrayPresas[] = array('estatus', new NodoDom(array('find' => '.respuestasazul'), 'plaintext', 1));
         $arrayPresas[] = array('fecha_recoleccion', new KeyValue('fecha de recoleccion'));
         $arrayPresas[] = array('fecha_programada', new KeyValue('de entrega', TRUE, TRUE));
         $arrayPresas[] = array('fecha_entrega', new KeyValue('Fecha y hora de entrega'));
         $arrayPresas[] = array('tipo_envio', new KeyValue('tipo de envio'));
         $arrayPresas[] = array('peso', new KeyValue('Peso kg'));
         $arrayPresas[] = array('peso_vol', new KeyValue('Peso volumétrico kg'));
-        $arrayPresas[] = array('firma_recibido', new NodoDom('img', 'src', 4));
         $arrayPresas[] = array('recibio', new KeyValue('recibio'));
+        $arrayPresas[] = array('historial', new Tabla(array('ocurrencia' => -1), 3));
         $this->_hunter->arrPresas($arrayPresas);
     }
 
@@ -190,6 +221,10 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
      * @dataProvider arrDatos
      */
     public function testFirmaRecibido($arrDatos) {
+        $arrayPresas = array();
+        $opcionesQuery = array('getElementById' => $arrDatos['codigo_rastreo'] . 'FIR', 'nextSibling' => '', 'find' => 'img');
+        $arrayPresas[] = array('firma_recibido', new NodoDom(array('navegacion' => $opcionesQuery), 'src'));
+        $this->_hunter->arrPresas($arrayPresas);
         $this->_hunter->strHtmlObjetivo($arrDatos['html']);
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['firma_recibido'], $resultados['firma_recibido']);
@@ -211,6 +246,16 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
         $this->_hunter->strHtmlObjetivo($arrDatos['html']);
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['peso_vol'], $resultados['peso_vol']);
+    }
+
+    /**
+     * @dataProvider arrDatos
+     */
+    public function testHistorial($arrDatos) {
+        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $resultados = $this->_hunter->hunt();
+        //var_export($resultados);
+        $this->assertEquals($arrDatos['historial'], $resultados['historial']);
     }
 
 }
