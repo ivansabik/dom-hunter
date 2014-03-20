@@ -17,14 +17,12 @@ DOM Hunter no es un web scrapper, realiza brute-force sobre todos los nodos Text
 - KeyValue
 - IdUnico
 - NodoDom
+- Tabla
 
 ### Ejemplo aplicable a Estafeta
 
 ```php
-$hunter = new DOMHunter();
-$hunter->strObjetivo = 'http://rastreo3.estafeta.com/RastreoWebInternet/consultaEnvio.do';
-$hunter->boolPost = 1;
-$hunter->params = array('tipoGuia' => 'REFERENCE', 'guias' => '2715597604');
+$hunter = new DomHunter();
 $arrayPresas = array();
 $arrayPresas[] = array('numero_guia', new KeyValue('numero de guia'));
 $arrayPresas[] = array('codigo_rastreo', new KeyValue('codigo de rastreo'));
@@ -32,17 +30,19 @@ $arrayPresas[] = array('origen', new KeyValue('origen'));
 $arrayPresas[] = array('destino', new KeyValue('destino', TRUE, TRUE));
 $arrayPresas[] = array('cp_destino', new IdUnico(5, 'num'));
 $arrayPresas[] = array('servicio', new KeyValue('entrega garantizada', FALSE));
-$arrayPresas[] = array('estatus', new NodoDom('.respuestasazul', 'plaintext', 1));
+$arrayPresas[] = array('estatus', new NodoDom(array('find' => '.respuestasazul'), 'plaintext', 1));
 $arrayPresas[] = array('fecha_recoleccion', new KeyValue('fecha de recoleccion'));
 $arrayPresas[] = array('fecha_programada', new KeyValue('de entrega', TRUE, TRUE));
 $arrayPresas[] = array('fecha_entrega', new KeyValue('Fecha y hora de entrega'));
 $arrayPresas[] = array('tipo_envio', new KeyValue('tipo de envio'));
 $arrayPresas[] = array('peso', new KeyValue('Peso kg'));
 $arrayPresas[] = array('peso_vol', new KeyValue('Peso volumétrico kg'));
-//$arrayPresas[] = array('firma_recibido', new NodoDom('img', 'src', 4));
 $arrayPresas[] = array('recibio', new KeyValue('recibio'));
+$arrayPresas[] = array('historial', new Tabla(array('ocurrencia' => -1), 3));
+$opcionesQuery = array('getElementById' => $codigoRastreo . 'FIR', 'nextSibling' => '', 'find' => 'img');
+$arrayPresas[] = array('firma_recibido', new NodoDom(array('navegacion' => $opcionesQuery), 'src'));
 $hunter->arrPresas($arrayPresas);
-$resultados = $hunter->hunt(); // Arreglo con los resultados
+$resultados = $hunter->hunt(); // Arreglo con los resultados, puede ir directísio a Mongodb
 ```
 ### Ejemplo aplicable a Correos de México
 ### Ejemplo aplicable a Tránsito DF (Infracciones)
