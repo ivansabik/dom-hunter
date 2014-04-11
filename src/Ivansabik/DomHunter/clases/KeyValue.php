@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Description of KeyValue
- *
- * @author ivansabik
- */
+# Description of KeyValue
 class KeyValue extends Presa {
 
     public $key;

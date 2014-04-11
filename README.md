@@ -62,3 +62,6 @@ Tanto para hacer las peticiones como para parsear los resultados, Dom Hunter bas
 - ADN Político
 
 En los archivos `doc/output[NOMBRE_SERVICIO].md` están los headers HTTP completos de las peticiones para cuando se tenga que emular otro dispositivo, enviar cookies y otras truculencias headeriles.
+
+TODO:
+http://rastreo2.estafeta.com/ShipmentPickUpWeb/actions/pickUpOrder.do?method=doGetPickUpOrder&forward=toPickUpInfo&idioma=es&pickUpId=8000000

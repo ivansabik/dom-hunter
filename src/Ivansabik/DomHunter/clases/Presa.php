@@ -1,9 +1,5 @@
 <?php
 
-/**
- *
- * @author ivansabik
- */
 class Presa {
 
     private $skip;

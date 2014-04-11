@@ -56,7 +56,7 @@ class Tabla extends Presa {
         return $arrRenglones;
     }
 
-    // Funcion se repite en DomHunter.php, refactor?
+    # Funcion se repite en DomHunter.php, refactor?
     private function _limpiaStr($strTexto) {
         $cur_encoding = mb_detect_encoding($strTexto);
         if ($cur_encoding == 'UTF-8' && mb_check_encoding($strTexto, 'UTF-8')) {

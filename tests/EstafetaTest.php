@@ -2,16 +2,14 @@
 
 require_once '../src/Ivansabik/DomHunter/DomHunter.php';
 
-/**
- * Prueba de DOM Hunter con datos de Estafeta
- *
- * @author ivansabik
- */
+# Prueba de DOM Hunter con datos de Estafeta
+
 class EstafetaTest extends PHPUnit_Framework_TestCase {
 
     private $_hunter;
 
-    // TODO: Agregar todos los htmls de prueba y separarlos en un include para que se vea nice
+    # TODO: Agregar todos los htmls de prueba y separarlos en un include para que se vea nice
+
     public static function arrDatos() {
         return array(
             array(
@@ -33,24 +31,24 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
                     'peso' => '0.2',
                     'peso_vol' => '0.0',
                     'historial' => array(
-                        array('28/11/2013 02:30 PM', 'Recolección en oficina por ruta local', ''),
-                        array('28/11/2013 12:19 PM', 'Envío recibido en oficina', 'Envío ocurre direccionado a oficina'),
-                        array('27/11/2013 07:18 PM', 'Carga Aerea AER Aclaración en proceso', 'Comunicarse al 01800 3782 338'),
-                        array('27/11/2013 04:18 PM', 'Envío recibido en oficina', 'Envío ocurre direccionado a oficina'),
-                        array('27/11/2013 09:19 AM', 'Estación Aérea MEX En proceso de entrega Av Central 161 Impulsora Popular Avicola Nezahualcoyotl', 'Envío ocurre direccionado a oficina'),
-                        array('27/11/2013 07:24 AM', 'Estación Aérea MEX Llegada a centro de distribución AMX Estación Aérea MEX', ''),
-                        array('26/11/2013 07:05 PM', 'MEXICO D.F. En ruta foránea hacia MX2-México (zona 2)', ''),
-                        array('26/11/2013 07:03 PM', 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', ''),
-                        array('26/11/2013 06:55 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Envío en proceso de entrega'),
-                        array('26/11/2013 06:55 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Recibe el área de Operaciones'),
-                        array('26/11/2013 03:17 PM', 'MEXICO D.F. Aclaración en proceso', 'Reporte generado por el cliente'),
-                        array('23/11/2013 10:42 AM', 'MEXICO D.F. Movimiento Local', 'Auditoria a ruta local'),
-                        array('22/11/2013 12:00 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Entrada a Control de Envíos'),
-                        array('22/11/2013 11:33 AM', 'MEXICO D.F. Movimiento Local', 'Entrega en Zona de Alto Riesgo y/o de difícil acceso'),
-                        array('22/11/2013 11:05 AM', 'MEXICO D.F. Movimiento en centro de distribución', 'Posible demora en la entrega por mal empaque'),
-                        array('22/11/2013 10:58 AM', 'MEXICO D.F. Movimiento Local', 'Entrega en Zona de Alto Riesgo y/o de difícil acceso'),
-                        array('21/11/2013 07:00 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Envío pendiente de salida a ruta local'),
-                        array('21/11/2013 06:56 PM', 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', ''),
+                        array('fecha' => '28/11/2013 02:30 PM', 'lugar_movimiento' => 'Recolección en oficina por ruta local', 'comentarios' => ''),
+                        array('fecha' => '28/11/2013 12:19 PM', 'lugar_movimiento' => 'Envío recibido en oficina', 'comentarios' => 'Envío ocurre direccionado a oficina'),
+                        array('fecha' => '27/11/2013 07:18 PM', 'lugar_movimiento' => 'Carga Aerea AER Aclaración en proceso', 'comentarios' => 'Comunicarse al 01800 3782 338'),
+                        array('fecha' => '27/11/2013 04:18 PM', 'lugar_movimiento' => 'Envío recibido en oficina', 'comentarios' => 'Envío ocurre direccionado a oficina'),
+                        array('fecha' => '27/11/2013 09:19 AM', 'lugar_movimiento' => 'Estación Aérea MEX En proceso de entrega Av Central 161 Impulsora Popular Avicola Nezahualcoyotl', 'comentarios' => 'Envío ocurre direccionado a oficina'),
+                        array('fecha' => '27/11/2013 07:24 AM', 'lugar_movimiento' => 'Estación Aérea MEX Llegada a centro de distribución AMX Estación Aérea MEX', 'comentarios' => ''),
+                        array('fecha' => '26/11/2013 07:05 PM', 'lugar_movimiento' => 'MEXICO D.F. En ruta foránea hacia MX2-México (zona 2)', 'comentarios' => ''),
+                        array('fecha' => '26/11/2013 07:03 PM', 'lugar_movimiento' => 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', ''),
+                        array('fecha' => '26/11/2013 06:55 PM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento en centro de distribución', 'comentarios' => 'Envío en proceso de entrega'),
+                        array('fecha' => '26/11/2013 06:55 PM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento en centro de distribución', 'comentarios' => 'Recibe el área de Operaciones'),
+                        array('fecha' => '26/11/2013 03:17 PM', 'lugar_movimiento' => 'MEXICO D.F. Aclaración en proceso', 'comentarios' => 'Reporte generado por el cliente'),
+                        array('fecha' => '23/11/2013 10:42 AM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento Local', 'comentarios' => 'Auditoria a ruta local'),
+                        array('fecha' => '22/11/2013 12:00 PM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento en centro de distribución', 'comentarios' => 'Entrada a Control de Envíos'),
+                        array('fecha' => '22/11/2013 11:33 AM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento Local', 'comentarios' => 'Entrega en Zona de Alto Riesgo y/o de difícil acceso'),
+                        array('fecha' => '22/11/2013 11:05 AM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento en centro de distribución', 'comentarios' => 'Posible demora en la entrega por mal empaque'),
+                        array('fecha' => '22/11/2013 10:58 AM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento Local', 'comentarios' => 'Entrega en Zona de Alto Riesgo y/o de difícil acceso'),
+                        array('fecha' => '21/11/2013 07:00 PM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento en centro de distribución', 'comentarios' => 'Envío pendiente de salida a ruta local'),
+                        array('fecha' => '21/11/2013 06:56 PM', 'lugar_movimiento' => 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', 'comentarios' => ''),
                     )
                 )
             ),
@@ -73,15 +71,15 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
                     'peso' => '0.7',
                     'peso_vol' => '1.9',
                     'historial' => array(
-                        array('26/11/2013 02:31 PM', 'MEXICO D.F. Aclaración en proceso', 'Comunicarse al 01800 3782 338'),
-                        array('26/11/2013 10:49 AM', 'MEXICO D.F. Aclaración en proceso', 'Reporte generado por el cliente'),
-                        array('31/10/2013 10:04 AM', 'Recolección en oficina por ruta local', ''),
-                        array('31/10/2013 09:12 AM', 'MEXICO D.F. En proceso de entrega MEX MEXICO D.F.', ''),
-                        array('30/10/2013 08:39 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Envío con manejo especial'),
-                        array('30/10/2013 07:52 PM', 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', ''),
-                        array('30/10/2013 06:06 PM', 'Recolección en oficina por ruta local', ''),
-                        array('30/10/2013 06:02 PM', 'Envío recibido en oficina', 'Envío recibido en oficina de Estafeta fuera del horario de recolección'),
-                        array('30/10/2013 02:00 PM', 'Envio recibido en oficina Av Adolfo Lopez Mateos 22 Local 4 Puente de Vigas Tlalnepantla', ''),
+                        array('fecha' => '26/11/2013 02:31 PM', 'lugar_movimiento' => 'MEXICO D.F. Aclaración en proceso', 'comentarios' => 'Comunicarse al 01800 3782 338'),
+                        array('fecha' => '26/11/2013 10:49 AM', 'lugar_movimiento' => 'MEXICO D.F. Aclaración en proceso', 'comentarios' => 'Reporte generado por el cliente'),
+                        array('fecha' => '31/10/2013 10:04 AM', 'lugar_movimiento' => 'Recolección en oficina por ruta local', 'comentarios' => ''),
+                        array('fecha' => '31/10/2013 09:12 AM', 'lugar_movimiento' => 'MEXICO D.F. En proceso de entrega MEX MEXICO D.F.', 'comentarios' => ''),
+                        array('fecha' => '30/10/2013 08:39 PM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento en centro de distribución', 'comentarios' => 'Envío con manejo especial'),
+                        array('fecha' => '30/10/2013 07:52 PM', 'lugar_movimiento' => 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', 'comentarios' => ''),
+                        array('fecha' => '30/10/2013 06:06 PM', 'lugar_movimiento' => 'Recolección en oficina por ruta local', 'comentarios' => ''),
+                        array('fecha' => '30/10/2013 06:02 PM', 'lugar_movimiento' => 'Envío recibido en oficina', 'comentarios' => 'Envío recibido en oficina de Estafeta fuera del horario de recolección'),
+                        array('fecha' => '30/10/2013 02:00 PM', 'lugar_movimiento' => 'Envio recibido en oficina Av Adolfo Lopez Mateos 22 Local 4 Puente de Vigas Tlalnepantla', 'comentarios' => ''),
                     ),
                 )
             )
@@ -106,153 +104,137 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
         $arrayPresas[] = array('peso_vol', new KeyValue('Peso volumétrico kg'));
         $arrayPresas[] = array('recibio', new KeyValue('recibio'));
         $arrayPresas[] = array('historial', new Tabla(array('ocurrencia' => -1), 3));
-        $this->_hunter->arrPresas($arrayPresas);
+        $this->_hunter->arrPresas->$arrayPresas;
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testNumeroGuia($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['numero_guia'], $resultados['numero_guia']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testCodigoRastreo($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['codigo_rastreo'], $resultados['codigo_rastreo']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testServicio($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['servicio'], $resultados['servicio']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testFechaProgramada($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['fecha_programada'], $resultados['fecha_programada']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testOrigen($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['origen'], $resultados['origen']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testCodigoPostalDestino($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['cp_destino'], $resultados['cp_destino']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testFechaRecoleccion($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['fecha_recoleccion'], $resultados['fecha_recoleccion']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testDestino($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['destino'], $resultados['destino']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testEstatusEnvio($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['estatus'], $resultados['estatus']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testFechaEntrega($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['fecha_entrega'], $resultados['fecha_entrega']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testTipoEnvio($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['tipo_envio'], $resultados['tipo_envio']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testRecibio($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['recibio'], $resultados['recibio']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testFirmaRecibido($arrDatos) {
         $arrayPresas = array();
         $opcionesQuery = array('getElementById' => $arrDatos['codigo_rastreo'] . 'FIR', 'nextSibling' => '', 'find' => 'img');
         $arrayPresas[] = array('firma_recibido', new NodoDom(array('navegacion' => $opcionesQuery), 'src'));
-        $this->_hunter->arrPresas($arrayPresas);
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->arrPresas->$arrayPresas;
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['firma_recibido'], $resultados['firma_recibido']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testPeso($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['peso'], $resultados['peso']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testPesoVolumetrico($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['peso_vol'], $resultados['peso_vol']);
     }
 
-    /**
-     * @dataProvider arrDatos
-     */
+    # @dataProvider arrDatos
+
     public function testHistorial($arrDatos) {
-        $this->_hunter->strHtmlObjetivo($arrDatos['html']);
+        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         //var_export($resultados);
         $this->assertEquals($arrDatos['historial'], $resultados['historial']);

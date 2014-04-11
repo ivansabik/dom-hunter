@@ -7,18 +7,15 @@ require '../vendor/autoload.php';
 
 use Sunra\PhpSimple\HtmlDomParser;
 
-/**
- * Prueba la clase Tabla
- *
- * @author ivansabik
- */
+# Prueba la clase Tabla
+
 class TablaTest extends PHPUnit_Framework_TestCase {
 
     private $_dom;
     private static $_arrTablaPrueba = array(
-        array('22/11/2013 09:09 AM', 'MEXICO D.F. En proceso de entrega MEX MEXICO D.F.', ''),
-        array('21/11/2013 06:58 PM', 'MEXICO D.F. Movimiento en centro de distribución', 'Envío pendiente de salida a ruta local'),
-        array('21/11/2013 06:56 PM', 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', '')
+        array('fecha' => '22/11/2013 09:09 AM', 'lugar_movimiento' => 'MEXICO D.F. En proceso de entrega MEX MEXICO D.F.', 'comentarios' => ''),
+        array('fecha' => '21/11/2013 06:58 PM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento en centro de distribución', 'comentarios' => 'Envío pendiente de salida a ruta local'),
+        array('fecha' => '21/11/2013 06:56 PM', 'lugar_movimiento' => 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', 'comentarios' => '')
     );
 
     protected function setUp() {
@@ -27,21 +24,24 @@ class TablaTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testNavegacion() {
-        $opcionesQuery = array('getElementById'=>'6058622149464701741673HIS', 'nextSibling' => '', 'lastChild' => '');
-        $opcionesTabla = array('navegacion'=> $opcionesQuery);
-        $tabla = new Tabla($opcionesTabla, 3);
+        $opcionesQuery = array('getElementById' => '6058622149464701741673HIS', 'nextSibling' => '', 'lastChild' => '');
+        $opcionesTabla = array('navegacion' => $opcionesQuery);
+        $columnas = array('fecha', 'lugar_movimiento', 'comentarios');
+        $tabla = new Tabla($opcionesTabla, $columnas);
         $this->assertEquals(self::$_arrTablaPrueba, $tabla->duckTest($this->_dom));
     }
 
     public function testOcurrenciaNumero() {
         $opcionesTabla = array('ocurrencia' => 18);
-        $tabla = new Tabla($opcionesTabla, 3);
+        $columnas = array('fecha', 'lugar_movimiento', 'comentarios');
+        $tabla = new Tabla($opcionesTabla, $columnas);
         $this->assertEquals(self::$_arrTablaPrueba, $tabla->duckTest($this->_dom));
     }
 
     public function testOcurrenciaUltimo() {
         $opcionesTabla = array('ocurrencia' => -1);
-        $tabla = new Tabla($opcionesTabla, 3);
+        $columnas = array('fecha', 'lugar_movimiento', 'comentarios');
+        $tabla = new Tabla($opcionesTabla, $columnas);
         $this->assertEquals(self::$_arrTablaPrueba, $tabla->duckTest($this->_dom));
     }
 

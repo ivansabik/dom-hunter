@@ -1,10 +1,10 @@
 <?php
 
-// Status, que funciona
-// Construccion de DOMHunter
-// IdUnico
-// TODO: refactor para usar namespaces PSR-0 (definir, quitar requires, usar "use")
-// TODO: refactor, muchas condiciones anidadas!
+# Status, que funciona
+# Construccion de DOMHunter
+# IdUnico
+# TODO: refactor para usar namespaces PSR-0 (definir, quitar requires, usar "use")
+# TODO: refactor, muchas condiciones anidadas!
 
 require '../vendor/autoload.php';
 require_once 'clases/IdUnico.php';
@@ -15,17 +15,17 @@ require_once 'clases/Tabla.php';
 use Sunra\PhpSimple\HtmlDomParser;
 
 class DomHunter {
+    # TODO: Manejo de ocurrencias (skip y como las vaya encontrando tambien si no regresa la misma siempre como peso y peso vol. de estafeta)
 
-    // TODO: Manejo de ocurrencias (skip y como las vaya encontrando tambien si no regresa la misma siempre como peso y peso vol. de estafeta) 
     public $arrParamsPeticion = array();
     public $strUrlObjetivo;
     public $boolPost;
-    public $strDispositivo; // Desktop, Mobile
+    public $strDispositivo; # Desktop, Mobile
     public $strOs;
     public $strNavegador;
     public $strHeadersEnviados;
     public $strHeadersRespuesta;
-    public $strSemillaBusqueda; // Para acelerar la busqueda si se conoce el nodo DOM base
+    public $strSemillaBusqueda; # Para acelerar la busqueda si se conoce el nodo DOM base
     public $strHtmlObjetivo;
     public $domRespuesta;
     public $arrPresas = array();
@@ -41,16 +41,18 @@ class DomHunter {
         $this->_settableVars = array_keys(get_object_vars($this));
     }
 
-    // Regresa un objeto con los resultados
+    # Regresa un objeto con los resultados
+    # TODO: Validar propiedades si existe hunt
+
     public function hunt() {
-        // URL objetivo, hay que ir a buscURLa
+        # URL objetivo, hay que ir a buscURLa
         if ($this->strUrlObjetivo) {
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $this->strUrlObjetivo);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
             curl_setopt($curl, CURLOPT_HEADER, TRUE);
-            // Si la petición es GET, construye URL con params, si es post hay adicionales pal cURL
+            # Si la petición es GET, construye URL con params, si es post hay adicionales pal cURL
             if (!$this->boolPost) {
                 if ($this->arrParamsPeticion) {
                     $strParamsHttp = http_build_query($this->arrParamsPeticion);
@@ -61,14 +63,14 @@ class DomHunter {
                 curl_setopt($curl, CURLOPT_POST, TRUE);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $this->arrParamsPeticion);
             }
-            // Asigna HTML y DOM respuestas de la petición
+            # Asigna HTML y DOM respuestas de la petición
             $strRespuestaCurl = curl_exec($curl);
             $intHeaderSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
             $this->strHeadersRespuesta = substr($strRespuestaCurl, 0, $intHeaderSize);
             $this->strHtmlObjetivo = substr($strRespuestaCurl, $intHeaderSize);
             curl_close($curl);
         }
-        // Ya con el string del html, viel spass
+        # Ya con el string del html, viel spass
         $this->domRespuesta = HtmlDomParser::str_get_html($this->strHtmlObjetivo);
         if ($this->strSemillaBusqueda) {
             $this->domRespuesta = $this->domRespuesta->find($this->strSemillaBusqueda);
@@ -111,34 +113,9 @@ class DomHunter {
         return $resultados;
     }
 
-    /**
-     * Set y Get de propiedades públicas
-     *
-     * Por ejemplo, `$dh->strOs('bubulubuntu')` settea $this->strOs, mientras
-     * que `echo $dh->strOs();` imprime `bubulubuntu`
-     * Un array se pasa como `$dh->arrPresas([$presa1, $presa2]);`
-     * ó `$dh->arrPresas($presa1, $presa2);`
-     * Hay que pensar que las variables deben de estar asignadas
-     * a su tipo, para poder hacer `array_push` en vez de settear todo el array
-     * y cosas así
-     *
-     * @return void
-     * @author Rob
-     * */
-    public function __call($method, $args) {
-        if (in_array($method, $this->_settableVars)) {
-            if (count($args) === 0) {
-                return $this->$method;
-            }
-            $value = count($args) === 1 ? $args[0] : $args;
-            $this->$method = $value;
-        } else {
-            throw new Exception('No tengo un método ' . $method . '!');
-        }
-    }
+    ## Para cuando son muchas tablas resultado como en Tránsito DF, no una tabla
+    ## como AICM porque ése sería agregar una Presa de tipo Tabla
 
-    // Para cuando son muchas tablas resultado como en Tránsito DF, no una tabla
-    // como AICM porque ése sería agregar una Presa de tipo Tabla
     public function huntMuchos() {
         
     }
@@ -154,8 +131,9 @@ class DomHunter {
         }
     }
 
-    // Quita espacios en blanco '', &nbsp; y tags HTML (para cuando el DOM esta jodido,
-    // como en estafeta, regresa tags HTML que no queremos (</tr>, </td>)
+    # Quita espacios en blanco '', &nbsp; y tags HTML
+    # regresa tags HTML que no queremos (</tr>, </td>)
+
     protected static function _limpiaStr($strTexto) {
         $cur_encoding = mb_detect_encoding($strTexto);
         if ($cur_encoding == 'UTF-8' && mb_check_encoding($strTexto, 'UTF-8')) {
