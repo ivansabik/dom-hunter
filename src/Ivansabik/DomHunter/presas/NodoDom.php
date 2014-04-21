@@ -1,5 +1,7 @@
 <?php
 
+namespace Ivansabik\DomHunter\Presas;
+
 class NodoDom extends Presa {
 
     public $strTag;

@@ -1,10 +1,14 @@
 <?php
 
-require_once '../src/Ivansabik/DomHunter/DomHunter.php';
+namespace Ivansabik\DomHunter\Test;
+
+use Ivansabik\DomHunter\DomHunter;
+use Ivansabik\DomHunter\Presas\KeyValue;
+
 
 # Prueba de DOM Hunter con datos de Estafeta
 
-class EstafetaTest extends PHPUnit_Framework_TestCase {
+class EstafetaTest extends \PHPUnit_Framework_TestCase {
 
     private $_hunter;
 
@@ -38,7 +42,7 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
                         array('fecha' => '27/11/2013 09:19 AM', 'lugar_movimiento' => 'Estación Aérea MEX En proceso de entrega Av Central 161 Impulsora Popular Avicola Nezahualcoyotl', 'comentarios' => 'Envío ocurre direccionado a oficina'),
                         array('fecha' => '27/11/2013 07:24 AM', 'lugar_movimiento' => 'Estación Aérea MEX Llegada a centro de distribución AMX Estación Aérea MEX', 'comentarios' => ''),
                         array('fecha' => '26/11/2013 07:05 PM', 'lugar_movimiento' => 'MEXICO D.F. En ruta foránea hacia MX2-México (zona 2)', 'comentarios' => ''),
-                        array('fecha' => '26/11/2013 07:03 PM', 'lugar_movimiento' => 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', ''),
+                        array('fecha' => '26/11/2013 07:03 PM', 'lugar_movimiento' => 'MEXICO D.F. Llegada a centro de distribución MEX MEXICO D.F.', 'comentarios' => ''),
                         array('fecha' => '26/11/2013 06:55 PM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento en centro de distribución', 'comentarios' => 'Envío en proceso de entrega'),
                         array('fecha' => '26/11/2013 06:55 PM', 'lugar_movimiento' => 'MEXICO D.F. Movimiento en centro de distribución', 'comentarios' => 'Recibe el área de Operaciones'),
                         array('fecha' => '26/11/2013 03:17 PM', 'lugar_movimiento' => 'MEXICO D.F. Aclaración en proceso', 'comentarios' => 'Reporte generado por el cliente'),
@@ -103,140 +107,157 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
         $arrayPresas[] = array('peso', new KeyValue('Peso kg'));
         $arrayPresas[] = array('peso_vol', new KeyValue('Peso volumétrico kg'));
         $arrayPresas[] = array('recibio', new KeyValue('recibio'));
-        $arrayPresas[] = array('historial', new Tabla(array('ocurrencia' => -1), 3));
-        $this->_hunter->arrPresas->$arrayPresas;
+        $columnas = array('fecha', 'lugar_movimiento', 'comentarios');
+        $arrayPresas[] = array('historial', new Tabla(array('ocurrencia' => -1), $columnas));
+        $this->_hunter->arrPresas = $arrayPresas;
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testNumeroGuia($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['numero_guia'], $resultados['numero_guia']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testCodigoRastreo($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['codigo_rastreo'], $resultados['codigo_rastreo']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testServicio($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['servicio'], $resultados['servicio']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testFechaProgramada($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['fecha_programada'], $resultados['fecha_programada']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testOrigen($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['origen'], $resultados['origen']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testCodigoPostalDestino($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['cp_destino'], $resultados['cp_destino']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testFechaRecoleccion($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['fecha_recoleccion'], $resultados['fecha_recoleccion']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testDestino($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['destino'], $resultados['destino']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testEstatusEnvio($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['estatus'], $resultados['estatus']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testFechaEntrega($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['fecha_entrega'], $resultados['fecha_entrega']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testTipoEnvio($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['tipo_envio'], $resultados['tipo_envio']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testRecibio($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['recibio'], $resultados['recibio']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testFirmaRecibido($arrDatos) {
         $arrayPresas = array();
         $opcionesQuery = array('getElementById' => $arrDatos['codigo_rastreo'] . 'FIR', 'nextSibling' => '', 'find' => 'img');
         $arrayPresas[] = array('firma_recibido', new NodoDom(array('navegacion' => $opcionesQuery), 'src'));
-        $this->_hunter->arrPresas->$arrayPresas;
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->arrPresas = $arrayPresas;
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['firma_recibido'], $resultados['firma_recibido']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testPeso($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['peso'], $resultados['peso']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testPesoVolumetrico($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
         $this->assertEquals($arrDatos['peso_vol'], $resultados['peso_vol']);
     }
 
-    # @dataProvider arrDatos
-
+    /**
+     * @dataProvider arrDatos
+     */
     public function testHistorial($arrDatos) {
-        $this->_hunter->strHtmlObjetivo->$arrDatos['html'];
+        $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
-        //var_export($resultados);
+        var_dump($resultados);
         $this->assertEquals($arrDatos['historial'], $resultados['historial']);
     }
 

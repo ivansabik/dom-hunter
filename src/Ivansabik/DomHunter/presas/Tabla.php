@@ -1,14 +1,16 @@
 <?php
 
+namespace Ivansabik\DomHunter\Presas;
+
 class Tabla extends Presa {
 
     public $arrOpcion;
     private $_strOpcion;
-    public $intColumnas;
+    public $arrNombresColumnas;
     public $boolSkipTitulos = FALSE;
     private static $_arrOpciones = array('navegacion', 'titulos', 'ocurrencia');
 
-    function __construct($arrOpcion, $intColumnas, $boolSkipTitulos = FALSE) {
+    function __construct($arrOpcion, $arrNombresColumnas, $boolSkipTitulos = TRUE) {
         $temp = array_slice($arrOpcion, 0, 1, true);
         $key = key($temp);
         if (!in_array($key, self::$_arrOpciones)) {
@@ -16,7 +18,7 @@ class Tabla extends Presa {
         }
         $this->arrOpcion = $arrOpcion;
         $this->_strOpcion = $key;
-        $this->intColumnas = $intColumnas;
+        $this->arrNombresColumnas = $arrNombresColumnas;
         $this->boolSkipTitulos = $boolSkipTitulos;
     }
 
@@ -46,10 +48,11 @@ class Tabla extends Presa {
             $textos = $tabla->find('td');
         }
         $arrRenglones = array();
-        for ($i = $this->intColumnas; $i < count($textos); $i+=$this->intColumnas) {
+        $intNumColumnas = count($this->arrNombresColumnas);
+        for ($i = $intNumColumnas; $i < count($textos); $i+=$intNumColumnas) {
             $arrColumna = array();
-            for ($j = 0; $j < $this->intColumnas; $j++) {
-                $arrColumna[] = $this->_limpiaStr($textos[$i + $j]->plaintext);
+            for ($j = 0; $j < $intNumColumnas; $j++) {
+                $arrColumna[$this->arrNombresColumnas[$j]] = $this->_limpiaStr($textos[$i + $j]->plaintext);
             }
             $arrRenglones[] = $arrColumna;
         }
@@ -57,6 +60,7 @@ class Tabla extends Presa {
     }
 
     # Funcion se repite en DomHunter.php, refactor?
+
     private function _limpiaStr($strTexto) {
         $cur_encoding = mb_detect_encoding($strTexto);
         if ($cur_encoding == 'UTF-8' && mb_check_encoding($strTexto, 'UTF-8')) {

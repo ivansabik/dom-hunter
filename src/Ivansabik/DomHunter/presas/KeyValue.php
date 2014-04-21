@@ -1,6 +1,9 @@
 <?php
 
+namespace Ivansabik\DomHunter\Presas;
+
 # Description of KeyValue
+
 class KeyValue extends Presa {
 
     public $key;

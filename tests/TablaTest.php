@@ -1,15 +1,13 @@
 <?php
 
-require_once '../src/Ivansabik/DomHunter/clases/Presa.php';
-require_once '../src/Ivansabik/DomHunter/clases/Tabla.php';
-
-require '../vendor/autoload.php';
+namespace Ivansabik\DomHunter\Test;
 
 use Sunra\PhpSimple\HtmlDomParser;
+use Ivansabik\DomHunter\Presas\Tabla;
 
 # Prueba la clase Tabla
 
-class TablaTest extends PHPUnit_Framework_TestCase {
+class TablaTest extends \PHPUnit_Framework_TestCase {
 
     private $_dom;
     private static $_arrTablaPrueba = array(

@@ -11,9 +11,12 @@
     "require": {
         "sunra/php-simple-html-dom-parser": "1.5.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
     "autoload": {
         "psr-0": {
-            "Ivansabik\\DomHunter": "src"
+            "Ivansabik\\DomHunter": "src/"
         }
     }
 }

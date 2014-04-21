@@ -6,12 +6,11 @@
 # TODO: refactor para usar namespaces PSR-0 (definir, quitar requires, usar "use")
 # TODO: refactor, muchas condiciones anidadas!
 
-require '../vendor/autoload.php';
-require_once 'clases/IdUnico.php';
-require_once 'clases/KeyValue.php';
-require_once 'clases/NodoDom.php';
-require_once 'clases/Tabla.php';
+namespace Ivansabik\DomHunter;
 
+use Ivansabik\DomHunter\Presas\KeyValue;
+use Ivansabik\DomHunter\Presas\NodoDom;
+use Ivansabik\DomHunter\Presas\Tabla;
 use Sunra\PhpSimple\HtmlDomParser;
 
 class DomHunter {
@@ -29,7 +28,6 @@ class DomHunter {
     public $strHtmlObjetivo;
     public $domRespuesta;
     public $arrPresas = array();
-    private $_settableVars;
     public $arrNodosTexto;
     private static $_arrDispositivos = array('desktop' => '',
         'movil' => ''
@@ -38,7 +36,6 @@ class DomHunter {
     public function __construct($strUrlObjetivo = '', $boolPost = FALSE) {
         $this->strUrlObjetivo = $strUrlObjetivo;
         $this->boolPost = $boolPost;
-        $this->_settableVars = array_keys(get_object_vars($this));
     }
 
     # Regresa un objeto con los resultados

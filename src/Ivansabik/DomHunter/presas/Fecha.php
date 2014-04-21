@@ -1,5 +1,7 @@
 <?php
 
+namespace Ivansabik\DomHunter\Presas;
+
 # Description of Fecha
 
 class Fecha extends Presa {
