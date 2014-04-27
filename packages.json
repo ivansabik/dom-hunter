@@ -1,0 +1,15 @@
+{
+    "packages": {
+        "name": "ivansabik/dom-hunter",
+        "version": "0.1.0",
+	"dist": {
+		"url": "https://github.com/ivanrodriguez/dom-hunter",
+		"type": "zip"
+	},
+	"source": {
+            "url": "https://github.com/ivanrodriguez/dom-hunter",
+            "type": "git",
+            "reference": ""
+        }
+    }
+}
