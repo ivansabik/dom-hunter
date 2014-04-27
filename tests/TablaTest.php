@@ -1,13 +1,12 @@
 <?php
-
-namespace Ivansabik\DomHunter\Test;
-
+require_once '../vendor/autoload.php';
+require_once '../src/Ivansabik/DomHunter/DomHunter.php';
+use Ivansabik\DomHunter\Tabla;
 use Sunra\PhpSimple\HtmlDomParser;
-use Ivansabik\DomHunter\Presas\Tabla;
 
 # Prueba la clase Tabla
 
-class TablaTest extends \PHPUnit_Framework_TestCase {
+class TablaTest extends PHPUnit_Framework_TestCase {
 
     private $_dom;
     private static $_arrTablaPrueba = array(
@@ -25,21 +24,22 @@ class TablaTest extends \PHPUnit_Framework_TestCase {
         $opcionesQuery = array('getElementById' => '6058622149464701741673HIS', 'nextSibling' => '', 'lastChild' => '');
         $opcionesTabla = array('navegacion' => $opcionesQuery);
         $columnas = array('fecha', 'lugar_movimiento', 'comentarios');
-        $tabla = new Tabla($opcionesTabla, $columnas);
+        $tabla = new Tabla($opcionesTabla, $columnas, 3);
+        var_dump($tabla->duckTest($this->_dom));
         $this->assertEquals(self::$_arrTablaPrueba, $tabla->duckTest($this->_dom));
     }
 
     public function testOcurrenciaNumero() {
         $opcionesTabla = array('ocurrencia' => 18);
         $columnas = array('fecha', 'lugar_movimiento', 'comentarios');
-        $tabla = new Tabla($opcionesTabla, $columnas);
+        $tabla = new Tabla($opcionesTabla, $columnas, 3);
         $this->assertEquals(self::$_arrTablaPrueba, $tabla->duckTest($this->_dom));
     }
 
     public function testOcurrenciaUltimo() {
         $opcionesTabla = array('ocurrencia' => -1);
         $columnas = array('fecha', 'lugar_movimiento', 'comentarios');
-        $tabla = new Tabla($opcionesTabla, $columnas);
+        $tabla = new Tabla($opcionesTabla, $columnas, 3);
         $this->assertEquals(self::$_arrTablaPrueba, $tabla->duckTest($this->_dom));
     }
 

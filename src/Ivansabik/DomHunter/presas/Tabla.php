@@ -1,16 +1,16 @@
 <?php
 
-namespace Ivansabik\DomHunter\Presas;
+namespace Ivansabik\DomHunter;
 
 class Tabla extends Presa {
 
     public $arrOpcion;
     private $_strOpcion;
     public $arrNombresColumnas;
-    public $boolSkipTitulos = FALSE;
+    public $intSkipVacios = FALSE;
     private static $_arrOpciones = array('navegacion', 'titulos', 'ocurrencia');
 
-    function __construct($arrOpcion, $arrNombresColumnas, $boolSkipTitulos = TRUE) {
+    function __construct($arrOpcion, $arrNombresColumnas, $intSkipVacios = NULL) {
         $temp = array_slice($arrOpcion, 0, 1, true);
         $key = key($temp);
         if (!in_array($key, self::$_arrOpciones)) {
@@ -19,7 +19,7 @@ class Tabla extends Presa {
         $this->arrOpcion = $arrOpcion;
         $this->_strOpcion = $key;
         $this->arrNombresColumnas = $arrNombresColumnas;
-        $this->boolSkipTitulos = $boolSkipTitulos;
+        $this->intSkipVacios = $intSkipVacios;
     }
 
     public function duckTest($dom) {
@@ -47,9 +47,25 @@ class Tabla extends Presa {
             }
             $textos = $tabla->find('td');
         }
+
+        # Saltar TDss vacíos que se pueden encontrar al princicip (como para de MisProfesores)
+        # ========================================
+        if ($this->intSkipVacios) {
+            for ($i = 1; $i <= $this->intSkipVacios; $i++) {
+                array_shift($textos);
+            }
+        }
+        # ========================================
+
         $arrRenglones = array();
         $intNumColumnas = count($this->arrNombresColumnas);
-        for ($i = $intNumColumnas; $i < count($textos); $i+=$intNumColumnas) {
+
+        # 0 ó 1 dependiendo si es true skipTitulos
+        # ========================================
+        $intInicioParsing = 0; 
+        # ========================================
+
+        for ($i = $intInicioParsing; $i < count($textos); $i+=$intNumColumnas) {
             $arrColumna = array();
             for ($j = 0; $j < $intNumColumnas; $j++) {
                 $arrColumna[$this->arrNombresColumnas[$j]] = $this->_limpiaStr($textos[$i + $j]->plaintext);

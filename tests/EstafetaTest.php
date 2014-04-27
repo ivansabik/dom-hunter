@@ -1,14 +1,15 @@
 <?php
-
-namespace Ivansabik\DomHunter\Test;
-
+require_once '../vendor/autoload.php';
+require_once '../src/Ivansabik/DomHunter/DomHunter.php';
 use Ivansabik\DomHunter\DomHunter;
-use Ivansabik\DomHunter\Presas\KeyValue;
-
+use Ivansabik\DomHunter\KeyValue;
+use Ivansabik\DomHunter\IdUnico;
+use Ivansabik\DomHunter\NodoDom;
+use Ivansabik\DomHunter\Tabla;
 
 # Prueba de DOM Hunter con datos de Estafeta
 
-class EstafetaTest extends \PHPUnit_Framework_TestCase {
+class EstafetaTest extends PHPUnit_Framework_TestCase {
 
     private $_hunter;
 
@@ -108,7 +109,7 @@ class EstafetaTest extends \PHPUnit_Framework_TestCase {
         $arrayPresas[] = array('peso_vol', new KeyValue('Peso volumétrico kg'));
         $arrayPresas[] = array('recibio', new KeyValue('recibio'));
         $columnas = array('fecha', 'lugar_movimiento', 'comentarios');
-        $arrayPresas[] = array('historial', new Tabla(array('ocurrencia' => -1), $columnas));
+        $arrayPresas[] = array('historial', new Tabla(array('ocurrencia' => -1), $columnas, 3));
         $this->_hunter->arrPresas = $arrayPresas;
     }
 

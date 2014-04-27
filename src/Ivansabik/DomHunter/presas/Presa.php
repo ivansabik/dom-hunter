@@ -1,13 +1,9 @@
 <?php
 
-namespace Ivansabik\DomHunter\Presas;
+namespace Ivansabik\DomHunter;
 
 class Presa {
 
     private $skip;
-
-    public function duckTest($objetoPrueba = '') {
-        return false;
-    }
 
 }

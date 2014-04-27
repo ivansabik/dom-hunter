@@ -1,8 +1,6 @@
 <?php
 
-namespace Ivansabik\DomHunter\Presas;
-
-use Ivansabik\DomHunter\Presas\Presa;
+namespace Ivansabik\DomHunter;
 
 class IdUnico extends Presa {
 

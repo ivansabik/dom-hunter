@@ -1,6 +1,6 @@
 <?php
 
-namespace Ivansabik\DomHunter\Presas;
+namespace Ivansabik\DomHunter;
 
 
 class ListaOpciones extends Presa {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ivansabik\DomHunter\Presas;
+namespace Ivansabik\DomHunter;
 
 class Regex extends Presa {
 # String con REGEXp

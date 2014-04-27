@@ -1,6 +1,6 @@
 <?php
 
-# Status, que funciona
+# Status, qué funciona, qué no, qué falta
 # Construccion de DOMHunter
 # IdUnico
 # TODO: refactor para usar namespaces PSR-0 (definir, quitar requires, usar "use")
@@ -8,13 +8,17 @@
 
 namespace Ivansabik\DomHunter;
 
-use Ivansabik\DomHunter\Presas\KeyValue;
-use Ivansabik\DomHunter\Presas\NodoDom;
-use Ivansabik\DomHunter\Presas\Tabla;
+require 'presas/Presa.php';
+require 'presas/KeyValue.php';
+require 'presas/NodoDom.php';
+require 'presas/Tabla.php';
+require 'presas/IdUnico.php';
+
 use Sunra\PhpSimple\HtmlDomParser;
 
 class DomHunter {
-    # TODO: Manejo de ocurrencias (skip y como las vaya encontrando tambien si no regresa la misma siempre como peso y peso vol. de estafeta)
+    # TODO: Manejo de ocurrencias (skip y como las vaya encontrando tambien si 
+    # no regresa la misma siempre como peso y peso vol. de estafeta)
 
     public $arrParamsPeticion = array();
     public $strUrlObjetivo;
@@ -42,14 +46,18 @@ class DomHunter {
     # TODO: Validar propiedades si existe hunt
 
     public function hunt() {
-        # URL objetivo, hay que ir a buscURLa
+        # URL objetivo, hay que buscURLa
+        
         if ($this->strUrlObjetivo) {
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $this->strUrlObjetivo);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
             curl_setopt($curl, CURLOPT_HEADER, TRUE);
-            # Si la petición es GET, construye URL con params, si es post hay adicionales pal cURL
+            
+            # Si la petición es GET, construye URL con params, si es post hay
+            # adicionales pal cURL)
+            
             if (!$this->boolPost) {
                 if ($this->arrParamsPeticion) {
                     $strParamsHttp = http_build_query($this->arrParamsPeticion);
@@ -60,14 +68,18 @@ class DomHunter {
                 curl_setopt($curl, CURLOPT_POST, TRUE);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $this->arrParamsPeticion);
             }
+            
             # Asigna HTML y DOM respuestas de la petición
+            
             $strRespuestaCurl = curl_exec($curl);
             $intHeaderSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
             $this->strHeadersRespuesta = substr($strRespuestaCurl, 0, $intHeaderSize);
             $this->strHtmlObjetivo = substr($strRespuestaCurl, $intHeaderSize);
             curl_close($curl);
         }
+        
         # Ya con el string del html, viel spass
+        
         $this->domRespuesta = HtmlDomParser::str_get_html($this->strHtmlObjetivo);
         if ($this->strSemillaBusqueda) {
             $this->domRespuesta = $this->domRespuesta->find($this->strSemillaBusqueda);
@@ -98,7 +110,7 @@ class DomHunter {
                     $resultados[$strNombreResultado] = '';
                 }
             } else {
-                // Aqui deberia ir algo para manejo de ocurrencias
+                # Aqui deberia ir algo para manejo de ocurrencias
                 foreach ($this->arrNodosTexto as $nodoTexto) {
                     $pato = $presa->duckTest($nodoTexto);
                     if ($pato) {
