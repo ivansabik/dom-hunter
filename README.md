@@ -22,30 +22,39 @@ DOM Hunter no es un web scrapper porque no puede simular actividad de un usuario
 
 ```php
 $hunter = new DomHunter();
-$arrayPresas = array();
-$arrayPresas[] = array('numero_guia', new KeyValue('numero de guia'));
-$arrayPresas[] = array('codigo_rastreo', new KeyValue('codigo de rastreo'));
-$arrayPresas[] = array('origen', new KeyValue('origen'));
-$arrayPresas[] = array('destino', new KeyValue('destino', TRUE, TRUE));
-$arrayPresas[] = array('cp_destino', new IdUnico(5, 'num'));
-$arrayPresas[] = array('servicio', new KeyValue('entrega garantizada', FALSE));
-$arrayPresas[] = array('estatus', new NodoDom(array('find' => '.respuestasazul'), 'plaintext', 1));
-$arrayPresas[] = array('fecha_recoleccion', new KeyValue('fecha de recoleccion'));
-$arrayPresas[] = array('fecha_programada', new KeyValue('de entrega', TRUE, TRUE));
-$arrayPresas[] = array('fecha_entrega', new KeyValue('Fecha y hora de entrega'));
-$arrayPresas[] = array('tipo_envio', new KeyValue('tipo de envio'));
-$arrayPresas[] = array('peso', new KeyValue('Peso kg'));
-$arrayPresas[] = array('peso_vol', new KeyValue('Peso volumétrico kg'));
-$arrayPresas[] = array('recibio', new KeyValue('recibio'));
-$arrayPresas[] = array('historial', new Tabla(array('ocurrencia' => -1), 3));
-$opcionesQuery = array('getElementById' => $codigoRastreo . 'FIR', 'nextSibling' => '', 'find' => 'img');
-$arrayPresas[] = array('firma_recibido', new NodoDom(array('navegacion' => $opcionesQuery), 'src'));
-$hunter->arrPresas($arrayPresas);
+$presas = array();
+$presas[] = array('numero_guia', new KeyValue('numero de guia'));
+$presas[] = array('codigo_rastreo', new KeyValue('digo de rastreo'));
+$presas[] = array('origen', new KeyValue('origen'));
+$presas[] = array('destino', new KeyValue('destino', TRUE, TRUE));
+$presas[] = array('cp_destino', new IdUnico(5, 'num'));
+$presas[] = array('servicio', new KeyValue('entrega garantizada', FALSE));
+$presas[] = array('estatus', new NodoDom(array('find' => '.respuestasazul'), 'plaintext', 1));
+$presas[] = array('fecha_recoleccion', new KeyValue('fecha de recoleccion'));
+$presas[] = array('fecha_programada', new KeyValue('de entrega', TRUE, TRUE));
+$presas[] = array('fecha_entrega', new KeyValue('Fecha y hora de entrega'));
+$presas[] = array('tipo_envio', new KeyValue('tipo de envio'));
+$presas[] = array('peso', new KeyValue('Peso kg'));
+$presas[] = array('peso_vol', new KeyValue('Peso volumétrico kg'));
+$presas[] = array('recibio', new KeyValue('recibi'));
+$presas[] = array('dimensiones', new KeyValue('Dimensiones cm'));
+$columnas = array('fecha', 'lugar_movimiento', 'comentarios');
+$presas[] = array('historial', new Tabla(array('ocurrencia' => -1), $columnas, 3));
+$hunter->arrPresas = $presas;
 $resultados = $hunter->hunt(); // Arreglo con los resultados, puede ir directísio a Mongodb
 ```
 ### Ejemplo aplicable a Correos de México
 ### Ejemplo aplicable a Tránsito DF (Infracciones)
 ### Ejemplo aplicable a AICM
+```php
+$hunter = new DomHunter('http://www.aicm.com.mx/en/flights?da=a&in=n');
+
+$columnas = array('origin', 'airline', 'flight', 'time', 'status', 'gate', 'terminal');
+$presas[] = array('llegadas', new Tabla(array('ocurrencia' => 1), $columnas));
+
+$hunter->arrPresas = $presas;
+$resultados = $hunter->hunt();
+```
 ### Ejemplo aplicable a Obligaciones IFAI (Contratos)
 ### Ejemplo aplicable a ADN Político
 

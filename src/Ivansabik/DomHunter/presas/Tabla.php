@@ -23,56 +23,64 @@ class Tabla extends Presa {
     }
 
     public function duckTest($dom) {
-        $textos = array();
-        if ($this->_strOpcion == 'navegacion') {
-            $arrOpcionesQuery = $this->arrOpcion['navegacion'];
-            $temp = array_slice($arrOpcionesQuery, 0, 1, true);
-            $key = key($temp);
-            $value = array_shift($arrOpcionesQuery);
-            $finalObj = $dom->$key($value);
-            foreach ($arrOpcionesQuery as $key => $value) {
-                $finalObj = $finalObj->$key($value);
+        try {
+            $textos = array();
+            if ($this->_strOpcion == 'navegacion') {
+                $arrOpcionesQuery = $this->arrOpcion['navegacion'];
+                $temp = array_slice($arrOpcionesQuery, 0, 1, true);
+                $key = key($temp);
+                $value = array_shift($arrOpcionesQuery);
+                $finalObj = $dom->$key($value);
+                foreach ($arrOpcionesQuery as $key => $value) {
+                    $finalObj = $finalObj->$key($value);
+                }
+                $textos = $finalObj->find('td');
+            } elseif ($this->_strOpcion == 'ocurrencia') {
+                $intOcurrencia = $this->arrOpcion['ocurrencia'];
+                $tablas = $dom->find('table');
+                if ($intOcurrencia > count($tablas)) {
+                    throw new Exception('La ocurrencia es mayor al numero de resultados');
+                }
+                if ($intOcurrencia == -1) {
+                    $tabla = array_pop($tablas);
+                } else {
+                    $tabla = $tablas[$intOcurrencia - 1];
+                }
+                $textos = $tabla->find('td');
             }
-            $textos = $finalObj->find('td');
-        } elseif ($this->_strOpcion == 'ocurrencia') {
-            $intOcurrencia = $this->arrOpcion['ocurrencia'];
-            $tablas = $dom->find('table');
-            if ($intOcurrencia > count($tablas)) {
-                throw new Exception('La ocurrencia es mayor al numero de resultados');
+
+            # Saltar TDss vacíos que se pueden encontrar al principio (como para de MisProfesores)
+            # ========================================
+            if ($this->intSkipVacios) {
+                for ($i = 1; $i <= $this->intSkipVacios; $i++) {
+                    array_shift($textos);
+                }
             }
-            if ($intOcurrencia == -1) {
-                $tabla = array_pop($tablas);
-            } else {
-                $tabla = $tablas[$intOcurrencia - 1];
+            # ========================================
+
+            for ($i = 0; $i < count($textos); $i++) {
+                echo '<p>' . $i . ' ' . $textos[$i] . '</p>';
             }
-            $textos = $tabla->find('td');
+
+            $arrRenglones = array();
+            $intNumColumnas = count($this->arrNombresColumnas);
+
+            # 0 ó 1 dependiendo si es true skipTitulos
+            # ========================================
+            $intInicioParsing = 0;
+            # ========================================
+
+            for ($i = $intInicioParsing; $i < count($textos); $i+=$intNumColumnas) {
+                $arrColumna = array();
+                for ($j = 0; $j < $intNumColumnas; $j++) {
+                    $arrColumna[$this->arrNombresColumnas[$j]] = $this->_limpiaStr($textos[$i + $j]->plaintext);
+                }
+                $arrRenglones[] = $arrColumna;
+            }
+            return $arrRenglones;
+        } catch (Exception $e) {
+            return new Exception('No existe un nodo resultado de la navegacion del DOM');
         }
-
-        # Saltar TDss vacíos que se pueden encontrar al princicip (como para de MisProfesores)
-        # ========================================
-        if ($this->intSkipVacios) {
-            for ($i = 1; $i <= $this->intSkipVacios; $i++) {
-                array_shift($textos);
-            }
-        }
-        # ========================================
-
-        $arrRenglones = array();
-        $intNumColumnas = count($this->arrNombresColumnas);
-
-        # 0 ó 1 dependiendo si es true skipTitulos
-        # ========================================
-        $intInicioParsing = 0; 
-        # ========================================
-
-        for ($i = $intInicioParsing; $i < count($textos); $i+=$intNumColumnas) {
-            $arrColumna = array();
-            for ($j = 0; $j < $intNumColumnas; $j++) {
-                $arrColumna[$this->arrNombresColumnas[$j]] = $this->_limpiaStr($textos[$i + $j]->plaintext);
-            }
-            $arrRenglones[] = $arrColumna;
-        }
-        return $arrRenglones;
     }
 
     # Funcion se repite en DomHunter.php, refactor?

@@ -1,6 +1,8 @@
 <?php
+
 require_once '../vendor/autoload.php';
 require_once '../src/Ivansabik/DomHunter/DomHunter.php';
+
 use Ivansabik\DomHunter\DomHunter;
 use Ivansabik\DomHunter\KeyValue;
 use Ivansabik\DomHunter\IdUnico;
@@ -85,6 +87,36 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
                         array('fecha' => '30/10/2013 06:06 PM', 'lugar_movimiento' => 'Recolección en oficina por ruta local', 'comentarios' => ''),
                         array('fecha' => '30/10/2013 06:02 PM', 'lugar_movimiento' => 'Envío recibido en oficina', 'comentarios' => 'Envío recibido en oficina de Estafeta fuera del horario de recolección'),
                         array('fecha' => '30/10/2013 02:00 PM', 'lugar_movimiento' => 'Envio recibido en oficina Av Adolfo Lopez Mateos 22 Local 4 Puente de Vigas Tlalnepantla', 'comentarios' => ''),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'html' => '<table width="88%" border="0" align="center" cellpadding="0" cellspacing="0">          <tbody><tr>            <td width="13" height="58" valign="top" background="http://www.estafeta.com/imagenes/lineageneralizquierda.png">&nbsp;</td>            <td width="664" valign="middle" background="http://www.estafeta.com/imagenes/medioazulgeneral.png"><div align="right"><img src="http://www.estafeta.com/imagenes/herramientas.png" width="333" height="31"></div></td>            <td width="11" valign="top" background="http://www.estafeta.com/imagenes/derechaazulgeneral.png">&nbsp;</td>          </tr>          <tr>            <td height="33" colspan="3" valign="top" background="http://www.estafeta.com/imagenes/separaseccroja.jpg"><div align="left"><img src="http://www.estafeta.com/imagenes/rastreotitulo.png" width="258" height="27"></div></td>          </tr>          <tr>            <td colspan="3" valign="top">              <!-- #BeginEditable "contenido" -->      <p align="right"><font color="#000000" face="Verdana, Arial, Helvetica, sans-serif" size="1"><a href="http://www.estafeta.com/herramientas/rastreo.aspx">Nueva consulta</a></font></p>         <div align="left">             <form>                   <table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr>  <td>   <table width="100%" border="0" cellpadding="1" cellspacing="1">    <tbody><tr>      <td width="16%" height="30" bgcolor="#d6d6d6" class="titulos"><div align="left" class="titulos">Número de guía</div></td>      <td width="30%" colspan="2" bgcolor="#edf0e9" class="respuestas"><div align="left" class="respuestas"> 3208544064715720055515</div></td>      <td width="16%" bgcolor="#d6d6d6" class="titulos"><div align="left" class="titulos">Código de rastreo</div></td>      <td width="35%" colspan="3" bgcolor="#edf0e9" class="respuestas"><div align="left" class="respuestas">3563581975</div></td>    </tr>   </tbody></table></td></tr><tr>  <td>   <table width="100%" border="0" cellpadding="1" cellspacing="1">    <tbody><tr>        <td width="16%" bgco',
+                    'numero_guia' => '3208544064715720055515',
+                    'codigo_rastreo' => '3563581975',
+                    'servicio' => 'Entrega garantizada al sexto día hábil',
+                    'fecha_programada' => '17/02/2014',
+                    'origen' => 'Tijuana',
+                    'cp_destino' => '01210',
+                    'fecha_recoleccion' => '07/02/2014 04:43 PM',
+                    'destino' => 'MEXICO D.F.',
+                    'estatus' => 'Entregado',
+                    'fecha_entrega' => '12/02/2014 01:01 PM',
+                    'tipo_envio' => 'PAQUETE',
+                    'recibio' => 'SDR:JOSE BOLA?OS', # (sic) Estafeta
+                    'firma_recibido' => '/RastreoWebInternet/firmaServlet?guia=3208544064715720055515&idioma=es',
+                    'peso' => '11.8',
+                    'peso_vol' => '4.7',
+                    'historial' => array(
+                        array('fecha' => '12/02/2014 09:14 AM', 'lugar_movimiento' => 'MEXICO D.F. En proceso de entrega MEX MEXICO D.F.', 'comentarios' => ''),
+                        array('fecha' => '12/02/2014 08:27 AM', 'lugar_movimiento' => 'MEXICO D.F. Llegada a centro de distribución', 'comentarios' => 'Envío en proceso de entrega'),
+                        array('fecha' => '11/02/2014 11:43 PM', 'lugar_movimiento' => 'Centro de Int. SLP En ruta foránea hacia MEX-MEXICO D.F.', 'comentarios' => ''),
+                        array('fecha' => '08/02/2014 12:49 PM', 'lugar_movimiento' => 'Recolección en oficina por ruta local', 'comentarios' => ''),
+                        array('fecha' => '07/02/2014 06:26 PM', 'lugar_movimiento' => 'Tijuana En ruta foránea hacia MEX-MEXICO D.F.', 'comentarios' => ''),
+                        array('fecha' => '07/02/2014 05:04 PM', 'lugar_movimiento' => 'Envío recibido en oficina', 'comentarios' => 'Envío recibido en oficina de Estafeta fuera del horario de recolección'),
+                        array('fecha' => '07/02/2014 04:58 PM', 'lugar_movimiento' => 'Recolección en oficina por ruta local', 'comentarios' => ''),
+                        array('fecha' => '07/02/2014 04:43 PM', 'lugar_movimiento' => 'Envio recibido en oficina CARRETERA AL AEROPUERTO AEROPUERTO TIJUANA BC', 'comentarios' => '')
                     ),
                 )
             )
@@ -226,7 +258,7 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
      */
     public function testFirmaRecibido($arrDatos) {
         $arrayPresas = array();
-        $opcionesQuery = array('getElementById' => $arrDatos['codigo_rastreo'] . 'FIR', 'nextSibling' => '', 'find' => 'img');
+        $opcionesQuery = array('getElementById' => $arrDatos['numero_guia'] . 'FIR', 'nextSibling' => '', 'find' => 'img');
         $arrayPresas[] = array('firma_recibido', new NodoDom(array('navegacion' => $opcionesQuery), 'src'));
         $this->_hunter->arrPresas = $arrayPresas;
         $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
@@ -258,7 +290,6 @@ class EstafetaTest extends PHPUnit_Framework_TestCase {
     public function testHistorial($arrDatos) {
         $this->_hunter->strHtmlObjetivo = $arrDatos['html'];
         $resultados = $this->_hunter->hunt();
-        var_dump($resultados);
         $this->assertEquals($arrDatos['historial'], $resultados['historial']);
     }
 

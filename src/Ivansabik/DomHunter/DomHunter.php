@@ -17,8 +17,8 @@ require 'presas/IdUnico.php';
 use Sunra\PhpSimple\HtmlDomParser;
 
 class DomHunter {
-    # TODO: Manejo de ocurrencias (skip y como las vaya encontrando tambien si 
-    # no regresa la misma siempre como peso y peso vol. de estafeta)
+# TODO: Manejo de ocurrencias (skip y como las vaya encontrando tambien si 
+# no regresa la misma siempre como peso y peso vol. de estafeta)
 
     public $arrParamsPeticion = array();
     public $strUrlObjetivo;
@@ -42,22 +42,22 @@ class DomHunter {
         $this->boolPost = $boolPost;
     }
 
-    # Regresa un objeto con los resultados
-    # TODO: Validar propiedades si existe hunt
+# Regresa un objeto con los resultados
+# TODO: Validar propiedades si existe hunt
 
     public function hunt() {
-        # URL objetivo, hay que buscURLa
-        
+# URL objetivo, hay que buscURLa
+
         if ($this->strUrlObjetivo) {
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $this->strUrlObjetivo);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
             curl_setopt($curl, CURLOPT_HEADER, TRUE);
-            
-            # Si la petición es GET, construye URL con params, si es post hay
-            # adicionales pal cURL)
-            
+
+# Si la petición es GET, construye URL con params, si es post hay
+# adicionales pal cURL)
+
             if (!$this->boolPost) {
                 if ($this->arrParamsPeticion) {
                     $strParamsHttp = http_build_query($this->arrParamsPeticion);
@@ -68,18 +68,18 @@ class DomHunter {
                 curl_setopt($curl, CURLOPT_POST, TRUE);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $this->arrParamsPeticion);
             }
-            
-            # Asigna HTML y DOM respuestas de la petición
-            
+
+# Asigna HTML y DOM respuestas de la petición
+
             $strRespuestaCurl = curl_exec($curl);
             $intHeaderSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
             $this->strHeadersRespuesta = substr($strRespuestaCurl, 0, $intHeaderSize);
             $this->strHtmlObjetivo = substr($strRespuestaCurl, $intHeaderSize);
             curl_close($curl);
         }
-        
-        # Ya con el string del html, viel spass
-        
+
+# Ya con el string del html, viel spass
+
         $this->domRespuesta = HtmlDomParser::str_get_html($this->strHtmlObjetivo);
         if ($this->strSemillaBusqueda) {
             $this->domRespuesta = $this->domRespuesta->find($this->strSemillaBusqueda);
@@ -92,7 +92,11 @@ class DomHunter {
             $presa = $arrNombreResultadoPresa[1];
             $arrElementosEliminar = array();
             if ($presa instanceof Tabla) {
-                $resultados[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
+                try {
+                    $resultados[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
+                } catch (Exception $e) {
+                    return array();
+                }
             } elseif ($presa instanceof KeyValue) {
                 for ($i = 0; $i < count($this->arrNodosTexto) - 1; $i++) {
                     $nodoTexto = $this->arrNodosTexto[$i];
@@ -110,7 +114,7 @@ class DomHunter {
                     $resultados[$strNombreResultado] = '';
                 }
             } else {
-                # Aqui deberia ir algo para manejo de ocurrencias
+# Aqui deberia ir algo para manejo de ocurrencias
                 foreach ($this->arrNodosTexto as $nodoTexto) {
                     $pato = $presa->duckTest($nodoTexto);
                     if ($pato) {
@@ -122,26 +126,30 @@ class DomHunter {
         return $resultados;
     }
 
-    ## Para cuando son muchas tablas resultado como en Tránsito DF, no una tabla
-    ## como AICM porque ése sería agregar una Presa de tipo Tabla
+## Para cuando son muchas tablas resultado como en Tránsito DF, no una tabla
+## como AICM porque ése sería agregar una Presa de tipo Tabla
 
     public function huntMuchos() {
         
     }
 
     private function _findTextNodes() {
-        $this->arrNodosTexto = array();
-        $arrTextNodes = $this->domRespuesta->find('text');
-        foreach ($arrTextNodes as $nodoTexto) {
-            $strNodoSanitizado = $this->_limpiaStr($nodoTexto->plaintext);
-            if (!empty($strNodoSanitizado)) {
-                $this->arrNodosTexto[] = $strNodoSanitizado;
+        try {
+            $this->arrNodosTexto = array();
+            $arrTextNodes = $this->domRespuesta->find('text');
+            foreach ($arrTextNodes as $nodoTexto) {
+                $strNodoSanitizado = $this->_limpiaStr($nodoTexto->plaintext);
+                if (!empty($strNodoSanitizado)) {
+                    $this->arrNodosTexto[] = $strNodoSanitizado;
+                }
             }
+        } catch (Exception $e) {
+            return new Exception('No hay nodos TXT');
         }
     }
 
-    # Quita espacios en blanco '', &nbsp; y tags HTML
-    # regresa tags HTML que no queremos (</tr>, </td>)
+# Quita espacios en blanco '', &nbsp; y tags HTML
+# regresa tags HTML que no queremos (</tr>, </td>)
 
     protected static function _limpiaStr($strTexto) {
         $cur_encoding = mb_detect_encoding($strTexto);

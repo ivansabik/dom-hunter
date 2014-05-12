@@ -8,8 +8,8 @@ use Ivansabik\DomHunter\Tabla;
 $hunter = new DomHunter('http://www.aicm.com.mx/en/flights?da=a&in=n');
 
 $columnas = array('origin', 'airline', 'flight', 'time', 'status', 'gate', 'terminal');
-$arrayPresas[] = array('llegadas', new Tabla(array('ocurrencia' => 1), $columnas));
+$presas[] = array('llegadas', new Tabla(array('ocurrencia' => 1), $columnas));
 
-$hunter->arrPresas = $arrayPresas;
+$hunter->arrPresas = $presas;
 $out = $hunter->hunt();
 var_dump($out);
