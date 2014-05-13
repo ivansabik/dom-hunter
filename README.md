@@ -21,7 +21,16 @@ DOM Hunter no es un web scrapper porque no puede simular actividad de un usuario
 ### Ejemplo aplicable a Estafeta
 
 ```php
-$hunter = new DomHunter();
+$params_peticion = array(
+    'idioma' => 'es',
+    'dispatch' => 'doRastreoInternet'
+    'guias' = '3563581975';
+    'tipoGuia' = 'ESTAFETA';
+);
+
+$hunter = new DomHunter('http://rastreo3.estafeta.com/RastreoWebInternet/consultaEnvio.do', 1);
+$hunter->arrParamsPeticion = $params_peticion;
+
 $presas = array();
 $presas[] = array('numero_guia', new KeyValue('numero de guia'));
 $presas[] = array('codigo_rastreo', new KeyValue('digo de rastreo'));
@@ -41,15 +50,15 @@ $presas[] = array('dimensiones', new KeyValue('Dimensiones cm'));
 $columnas = array('fecha', 'lugar_movimiento', 'comentarios');
 $presas[] = array('historial', new Tabla(array('ocurrencia' => -1), $columnas, 3));
 $hunter->arrPresas = $presas;
-$resultados = $hunter->hunt(); // Arreglo con los resultados, puede ir directísio a Mongodb
+
+$resultados = $hunter->hunt(); # Arreglo con los resultados, puede ir directísimo a Mongodb
 ```
-### Ejemplo aplicable a Correos de México
-### Ejemplo aplicable a Tránsito DF (Infracciones)
+### Ejemplo Correos de México
+### Ejemplo Tránsito DF (Infracciones)
 ```php
 
 $hunter = new DomHunter('http://www.finanzas.df.gob.mx/sma/detallePlaca.php?placa=912TER');
 
-# Buen candidato para probar huntMuchos()
 $presas = array();
 $presas[] = array('folio', new IdUnico(11, 'num'));
 $presas[] = array('situacion', new KeyValue('pagada', FALSE));
@@ -59,7 +68,7 @@ $presas[] = array('sancion', new KeyValue('as de salario m', FALSE));
 $hunter->arrPresas = $presas;
 $hunted = $hunter->hunt();
 ```
-### Ejemplo aplicable a AICM
+### Ejemplo AICM
 ```php
 $hunter = new DomHunter('http://www.aicm.com.mx/en/flights?da=a&in=n');
 
@@ -69,8 +78,30 @@ $presas[] = array('llegadas', new Tabla(array('ocurrencia' => 1), $columnas));
 $hunter->arrPresas = $presas;
 $resultados = $hunter->hunt();
 ```
-### Ejemplo aplicable a Obligaciones IFAI (Contratos)
-### Ejemplo aplicable a ADN Político
+### Ejemplo Obligaciones IFAI (Contratos)
+```php
+$hunter = new DomHunter('http://portaltransparencia.gob.mx/pot/contrataciones/consultarContrato.do?method=consultaContrato&id.idContrato=130767&_idDependencia=12220');
+
+$presas = array();
+$presas[] = array('sector_presupuestal', new KeyValue('SECTOR PRESUPUESTAL'));
+$presas[] = array('siglas', new KeyValue('SIGLAS'));
+$presas[] = array('fecha_actualizacion', new KeyValue('Última fecha de actualizaci'));
+$presas[] = array('numero_contrato', new KeyValue('mero de Contrato'));
+$presas[] = array('unidad_administrativa', new KeyValue('Unidad administrativa que celebr'));
+$presas[] = array('procedimiento_contratacion', new KeyValue('Procedimiento de contrataci'));
+$presas[] = array('denominacion_asignado', new KeyValue('n social de la persona moral a que se asig'));
+$presas[] = array('fecha_contrato', new KeyValue('Fecha de celebraci'));
+$presas[] = array('objeto_contrato', new KeyValue('Objeto de contrato'));
+$presas[] = array('monto_contrato', new KeyValue('Monto del contrato'));
+$presas[] = array('moneda', new KeyValue('Tipo de Moneda'));
+$presas[] = array('fecha_inicio', new KeyValue('Fecha de inicio del contrato'));
+$presas[] = array('fecha_fin', new KeyValue('Fecha de terminaci'));
+$presas[] = array('documento', new KeyValue('Documento del Contrato'));
+
+$hunter->arrPresas = $presas;
+$hunted = $hunter->hunt();
+```
+### Ejemplo ADN Político
 
 ## Pruebas
 
