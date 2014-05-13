@@ -14,7 +14,7 @@ class Tabla extends Presa {
         $temp = array_slice($arrOpcion, 0, 1, true);
         $key = key($temp);
         if (!in_array($key, self::$_arrOpciones)) {
-            throw new Exception('Los tipos validos para una tabla son: ' . implode(',', $this->_arrOpciones));
+            throw new Exception('Los tipos validos para una tabla son: ' . implode(',', self::$_arrOpciones));
         }
         $this->arrOpcion = $arrOpcion;
         $this->_strOpcion = $key;
@@ -27,7 +27,7 @@ class Tabla extends Presa {
             $textos = array();
             if ($this->_strOpcion == 'navegacion') {
                 $arrOpcionesQuery = $this->arrOpcion['navegacion'];
-                $temp = array_slice($arrOpcionesQuery, 0, 1, true);
+                $temp = array_slice($arrOpcionesQuery, 0, 1, TRUE);
                 $key = key($temp);
                 $value = array_shift($arrOpcionesQuery);
                 $finalObj = $dom->$key($value);
@@ -57,10 +57,6 @@ class Tabla extends Presa {
                 }
             }
             # ========================================
-
-            for ($i = 0; $i < count($textos); $i++) {
-                echo '<p>' . $i . ' ' . $textos[$i] . '</p>';
-            }
 
             $arrRenglones = array();
             $intNumColumnas = count($this->arrNombresColumnas);

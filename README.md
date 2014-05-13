@@ -45,6 +45,20 @@ $resultados = $hunter->hunt(); // Arreglo con los resultados, puede ir directís
 ```
 ### Ejemplo aplicable a Correos de México
 ### Ejemplo aplicable a Tránsito DF (Infracciones)
+```php
+
+$hunter = new DomHunter('http://www.finanzas.df.gob.mx/sma/detallePlaca.php?placa=912TER');
+
+# Buen candidato para probar huntMuchos()
+$presas = array();
+$presas[] = array('folio', new IdUnico(11, 'num'));
+$presas[] = array('situacion', new KeyValue('pagada', FALSE));
+$presas[] = array('motivo', new KeyValue('Motivo'));
+$presas[] = array('fundamento', new KeyValue('Fundamento'));
+$presas[] = array('sancion', new KeyValue('as de salario m', FALSE));
+$hunter->arrPresas = $presas;
+$hunted = $hunter->hunt();
+```
 ### Ejemplo aplicable a AICM
 ```php
 $hunter = new DomHunter('http://www.aicm.com.mx/en/flights?da=a&in=n');

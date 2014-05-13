@@ -3,7 +3,14 @@
 namespace Ivansabik\DomHunter;
 
 class Regex extends Presa {
-# String con REGEXp
+
+    public $strRegexp;
+
+    function __construct($strRegexp) {
+        $this->strRegexp = $strRegexp;
+    }
+
+    
 }
 
 ?>

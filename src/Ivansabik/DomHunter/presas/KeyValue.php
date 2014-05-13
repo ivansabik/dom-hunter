@@ -16,7 +16,7 @@ class KeyValue extends Presa {
         'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
         'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y');
 
-    function __construct($key, $boolReturnSiguiente = true, $boolCoincidenciaExacta = false) {
+    function __construct($key, $boolReturnSiguiente = TRUE, $boolCoincidenciaExacta = FALSE) {
         $this->key = $key;
         $this->boolReturnSiguiente = $boolReturnSiguiente;
         $this->boolCoincidenciaExacta = $boolCoincidenciaExacta;
@@ -39,7 +39,7 @@ class KeyValue extends Presa {
                 return $strTextoPrueba;
             }
         }
-        return false;
+        return FALSE;
     }
 
 }

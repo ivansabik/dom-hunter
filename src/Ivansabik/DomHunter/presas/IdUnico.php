@@ -10,7 +10,7 @@ class IdUnico extends Presa {
 
     function __construct($longitud, $tipo) {
         if (!in_array($tipo, self::$_arrTipos)) {
-            throw new Exception('Los tipos validos para un Id Unico son: ' . implode(',', $this->_arrTipos));
+            throw new Exception('Los tipos validos para un Id Unico son: ' . implode(',', self::$_arrTipos));
         }
         $this->longitud = $longitud;
         $this->tipo = $tipo;
