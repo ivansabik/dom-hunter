@@ -43,12 +43,16 @@ class NodoDom extends Presa {
                 foreach ($arrOpcionesQuery as $key => $value) {
                     $finalObj = $finalObj->$key($value);
                 }
-                if ($this->intSkip == 0) {
-                    $finalObj = $finalObj[0];
+                if ($finalObj) {
+                    if ($this->intSkip == 0) {
+                        $finalObj = $finalObj[0];
+                    } else {
+                        $finalObj = $finalObj[$this->intSkip - 1];
+                    }
+                    return html_entity_decode($finalObj->$valor);
                 } else {
-                    $finalObj = $finalObj[$this->intSkip - 1];
+                    return false;
                 }
-                return html_entity_decode($finalObj->$valor);
             } else {
                 return false;
             }
