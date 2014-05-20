@@ -2,7 +2,7 @@
     "name": "ivansabik/dom-hunter",
     "description": "Toolkit that helps in creating custom APIs using cURL HTTP requests and crawling thru the DOM",
     "license": "MIT",
-    "version" : "0.1.0",
+    "version" : "dev-master",
     "authors": [
         {
             "name": "Ivan Rodriguez",
