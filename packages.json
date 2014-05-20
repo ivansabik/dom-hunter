@@ -1,7 +1,7 @@
 {
     "packages": {
         "name": "ivansabik/dom-hunter",
-        "version": "0.1.0",
+        "version": "dev-master",
 	"dist": {
 		"url": "https://github.com/ivanrodriguez/dom-hunter",
 		"type": "zip"
