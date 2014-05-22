@@ -104,6 +104,7 @@ class DomHunter {
                     $pato = $presa->duckTest($nodoTexto, $nodoSiguiente);
                     if ($pato) {
                         $resultados[$strNombreResultado] = $pato;
+                        break;
                     }
                 }
             } elseif ($presa instanceof NodoDom) {

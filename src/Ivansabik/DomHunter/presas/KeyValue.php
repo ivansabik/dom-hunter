@@ -25,11 +25,10 @@ class KeyValue extends Presa {
     public function duckTest($strTextoPrueba, $strTextoResultado) {
         $patos = array();
         if ($this->boolCoincidenciaExacta == TRUE) {
-            if (strcasecmp(strtr($this->key, self::$_arrCaracteresRaros), strtr($strTextoPrueba, self::$_arrCaracteresRaros)) == 0) {
-                $patos[] = $this->key;
-            }
+            preg_match('/' . strtr(preg_quote($this->key), self::$_arrCaracteresRaros) . '/', strtr($strTextoPrueba, self::$_arrCaracteresRaros), $patos);
         } else {
-            preg_match('/' . strtr($this->key, self::$_arrCaracteresRaros) . '\b/i', strtr($strTextoPrueba, self::$_arrCaracteresRaros), $patos);
+            # Sera?
+            preg_match('/' . strtr(preg_quote($this->key), self::$_arrCaracteresRaros) . '\b/i', strtr($strTextoPrueba, self::$_arrCaracteresRaros), $patos);
         }
 
         if (!empty($patos)) {
