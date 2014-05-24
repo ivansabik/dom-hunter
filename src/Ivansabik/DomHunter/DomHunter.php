@@ -1,10 +1,8 @@
 <?php
 
 # Status, qué funciona, qué no, qué falta
-# Construccion de DOMHunter
-# IdUnico
-# TODO: refactor para usar namespaces PSR-0 (definir, quitar requires, usar "use")
 # TODO: refactor, muchas condiciones anidadas!
+# TODO definir metodos de construccion de presas, que sean consistentes
 
 namespace Ivansabik\DomHunter;
 
@@ -13,6 +11,7 @@ require 'presas/KeyValue.php';
 require 'presas/NodoDom.php';
 require 'presas/Tabla.php';
 require 'presas/IdUnico.php';
+require 'presas/SelectOptions.php';
 
 use Sunra\PhpSimple\HtmlDomParser;
 
@@ -33,9 +32,6 @@ class DomHunter {
     public $domRespuesta;
     public $arrPresas = array();
     public $arrNodosTexto;
-    private static $_arrDispositivos = array('desktop' => '',
-        'movil' => ''
-    );
 
     public function __construct($strUrlObjetivo = '', $boolPost = FALSE) {
         $this->strUrlObjetivo = $strUrlObjetivo;
@@ -91,13 +87,16 @@ class DomHunter {
             $strNombreResultado = $arrNombreResultadoPresa[0];
             $presa = $arrNombreResultadoPresa[1];
             $arrElementosEliminar = array();
+            # Hunt Tabla
             if ($presa instanceof Tabla) {
                 try {
                     $resultados[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
                 } catch (Exception $e) {
                     return array();
                 }
-            } elseif ($presa instanceof KeyValue) {
+            }
+            # Hunt KeyValue
+            elseif ($presa instanceof KeyValue) {
                 for ($i = 0; $i < count($this->arrNodosTexto) - 1; $i++) {
                     $nodoTexto = $this->arrNodosTexto[$i];
                     $nodoSiguiente = $this->arrNodosTexto[$i + 1];
@@ -107,12 +106,21 @@ class DomHunter {
                         break;
                     }
                 }
+                # Hunt NodoDom
             } elseif ($presa instanceof NodoDom) {
                 $pato = $presa->duckTest($this->domRespuesta);
                 if ($pato) {
                     $resultados[$strNombreResultado] = $this->_limpiaStr($pato);
                 } else {
                     $resultados[$strNombreResultado] = '';
+                }
+            }
+            # Hunt SelectOptions
+            if ($presa instanceof SelectOptions) {
+                try {
+                    $resultados[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
+                } catch (Exception $e) {
+                    return array();
                 }
             } else {
 # Aqui deberia ir algo para manejo de ocurrencias

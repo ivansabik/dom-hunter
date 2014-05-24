@@ -7,7 +7,7 @@ class Tabla extends Presa {
     public $arrOpcion;
     private $_strOpcion;
     public $arrNombresColumnas;
-    public $intSkipVacios = FALSE;
+    public $intSkipVacios;
     private static $_arrOpciones = array('navegacion', 'titulos', 'ocurrencia');
 
     function __construct($arrOpcion, $arrNombresColumnas, $intSkipVacios = NULL) {
