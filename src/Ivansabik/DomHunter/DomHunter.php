@@ -116,20 +116,14 @@ class DomHunter {
                 }
             }
             # Hunt SelectOptions
-            if ($presa instanceof SelectOptions) {
+            elseif ($presa instanceof SelectOptions) {
                 try {
                     $resultados[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
                 } catch (Exception $e) {
                     return array();
                 }
             } else {
-# Aqui deberia ir algo para manejo de ocurrencias
-                foreach ($this->arrNodosTexto as $nodoTexto) {
-                    $pato = $presa->duckTest($nodoTexto);
-                    if ($pato) {
-                        $resultados[$strNombreResultado] = $pato;
-                    }
-                }
+                
             }
         }
         return $resultados;

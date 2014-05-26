@@ -8,7 +8,7 @@ class Tabla extends Presa {
     private $_strOpcion;
     public $arrNombresColumnas;
     public $intSkipVacios;
-    private static $_arrOpciones = array('navegacion', 'titulos', 'ocurrencia');
+    private static $_arrOpciones = array('navegacion', 'titulos', 'ocurrencia', 'id_nodo');
 
     function __construct($arrOpcion, $arrNombresColumnas, $intSkipVacios = NULL) {
         $temp = array_slice($arrOpcion, 0, 1, true);
@@ -47,6 +47,10 @@ class Tabla extends Presa {
                     $tabla = $tablas[$intOcurrencia - 1];
                 }
                 $textos = $tabla->find('td');
+            } elseif ($this->_strOpcion == 'id_nodo') {
+                $strIDNodo = $this->arrOpcion['id_nodo'];
+                if (isset($dom->nodes))
+                    $textos = $dom->find("#$strIDNodo td");
             }
 
             # Saltar TDss vacíos que se pueden encontrar al principio (como para de MisProfesores)
