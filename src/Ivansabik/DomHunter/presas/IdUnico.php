@@ -16,15 +16,17 @@ class IdUnico extends Presa {
         $this->tipo = $tipo;
     }
 
-    public function duckTest($strTextoPrueba) {
-        if ($this->tipo == 'num') {
-            $patos = array();
-            preg_match('/^\d{' . $this->longitud . '}\b/', $strTextoPrueba, $patos);
-            if (!empty($patos)) {
-                return $patos[0];
+    public function duckTest($arrNodosTexto) {
+        foreach ($arrNodosTexto as $nodoTexto) {
+            if ($this->tipo == 'num') {
+                $patos = array();
+                preg_match('/^\d{' . $this->longitud . '}\b/', $nodoTexto, $patos);
+                if (!empty($patos)) {
+                    return $patos[0];
+                }
             }
         }
-        return false;
+        return FALSE;
     }
 
 }

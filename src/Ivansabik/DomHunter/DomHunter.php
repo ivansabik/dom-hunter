@@ -82,7 +82,7 @@ class DomHunter {
             $this->domRespuesta = $this->domRespuesta[0];
         }
         $this->_findTextNodes();
-        $resultados = array();
+        $hunted = array();
         foreach ($this->arrPresas as $arrNombreResultadoPresa) {
             $strNombreResultado = $arrNombreResultadoPresa[0];
             $presa = $arrNombreResultadoPresa[1];
@@ -90,43 +90,45 @@ class DomHunter {
             # Hunt Tabla
             if ($presa instanceof Tabla) {
                 try {
-                    $resultados[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
+                    $hunted[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
                 } catch (Exception $e) {
                     return array();
                 }
             }
             # Hunt KeyValue
             elseif ($presa instanceof KeyValue) {
-                for ($i = 0; $i < count($this->arrNodosTexto) - 1; $i++) {
-                    $nodoTexto = $this->arrNodosTexto[$i];
-                    $nodoSiguiente = $this->arrNodosTexto[$i + 1];
-                    $pato = $presa->duckTest($nodoTexto, $nodoSiguiente);
-                    if ($pato) {
-                        $resultados[$strNombreResultado] = $pato;
-                        break;
-                    }
+                $pato = $presa->duckTest($this->arrNodosTexto);
+                if ($pato) {
+                    $hunted[$strNombreResultado] = $pato;
                 }
                 # Hunt NodoDom
             } elseif ($presa instanceof NodoDom) {
                 $pato = $presa->duckTest($this->domRespuesta);
                 if ($pato) {
-                    $resultados[$strNombreResultado] = $this->_limpiaStr($pato);
+                    $hunted[$strNombreResultado] = $this->_limpiaStr($pato);
                 } else {
-                    $resultados[$strNombreResultado] = '';
+                    $hunted[$strNombreResultado] = '';
                 }
             }
             # Hunt SelectOptions
             elseif ($presa instanceof SelectOptions) {
                 try {
-                    $resultados[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
+                    $hunted[$strNombreResultado] = $presa->duckTest($this->domRespuesta);
                 } catch (Exception $e) {
                     return array();
+                }
+            }
+            # Hunt IdUnico
+            elseif ($presa instanceof IdUnico) {
+                $pato = $presa->duckTest($this->arrNodosTexto);
+                if ($pato) {
+                    $hunted[$strNombreResultado] = $pato;
                 }
             } else {
                 
             }
         }
-        return $resultados;
+        return $hunted;
     }
 
 ## Para cuando son muchas tablas resultado como en Tránsito DF, no una tabla

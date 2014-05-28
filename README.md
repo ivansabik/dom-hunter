@@ -1,6 +1,6 @@
 DOM Hunter
 ===
-Toolkit PHP para explorar una respuesta HTML / Document Object Model (DOM) en busca de objetos. Ayuda a realizar descubrimiento de contenido como para hacer webscraping, construir APIs a partir de aplicaciones web existentes.
+Libreria para explorar una respuesta HTML / Document Object Model (DOM) en busca de objetos. Ayuda a realizar descubrimiento de contenido como para hacer webscraping, construir APIs a partir de aplicaciones web existentes.
 DOM Hunter permite especificar distintas presas que será cazadas en una URL o código HTML destino. La librería contiene un repositorio de características que típicamente querrían encontrarse en una respuesta HTML para construir APIs (fechas, identificadores, palabras clave, etc). DOM Hunter hace uso de la navegación del DOM y expresiones regulares para cazar las presas. Así funciona:
 
  1. El usuario crea una instancia de DOMHunter indicando las opciones adicionales como headers, emular un browser/dispositivo, petición POST/GET, etc.
@@ -9,7 +9,9 @@ DOM Hunter permite especificar distintas presas que será cazadas en una URL o c
  4. La librería hace una petición cURL al objetivo (o se puede settear directamente un string con el HTML) y limpia el DOM, después lo distribuye a objetos para que busquen las presas.
  5. Se obtiene un array con los resultados en los índices especificados.
 
-DOM Hunter no es un web scrapper porque no puede simular actividad de un usuario como clicks, timeouts, etc. Se limita a buscar todos los nodos Text de la respuesta y usar expresiones regulares para encontrar los elementos aunque cambie la estructura del DOM.
+DOM Hunter no es un web scrapper completo porque no puede simular actividad de un usuario como clicks, timeouts, etc. Se limita a buscar todos los nodos Text de la respuesta y usar expresiones regulares para encontrar los elementos aunque cambie la estructura del DOM.
+
+### Esta cambiando constantemente entonces la forma de uso puede variar mucho en el primer release
  
 ## Presas (objetos que encuentra)
 
@@ -17,6 +19,8 @@ DOM Hunter no es un web scrapper porque no puede simular actividad de un usuario
 - IdUnico
 - NodoDom
 - Tabla
+- SelectOptions
+- Imagen (falta)
 
 ### Ejemplo aplicable a Estafeta
 
