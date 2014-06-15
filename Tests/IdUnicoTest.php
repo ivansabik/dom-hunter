@@ -1,10 +1,6 @@
 <?php
 require_once '../src/Ivansabik/DomHunter/DomHunter.php';
-/**
- * Prueba la clase IDUnico
- *
- * @author ivansabik
- */
+
 class IdUnicoTest extends PHPUnit_Framework_TestCase {
 
     public function testNumerico() {
