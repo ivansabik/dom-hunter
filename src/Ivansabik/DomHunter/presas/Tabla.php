@@ -8,9 +8,10 @@ class Tabla extends Presa {
     private $_strOpcion;
     public $arrNombresColumnas;
     public $intSkipVacios;
+    private $_boolRespuestaCastNum;
     private static $_arrOpciones = array('navegacion', 'titulos', 'ocurrencia', 'id_nodo');
 
-    function __construct($arrOpcion, $arrNombresColumnas, $intSkipVacios = NULL) {
+    function __construct($arrOpcion, $arrNombresColumnas, $intSkipVacios = NULL, $boolRespuestaCastNum = false) {
         $temp = array_slice($arrOpcion, 0, 1, true);
         $key = key($temp);
         if (!in_array($key, self::$_arrOpciones)) {
@@ -20,6 +21,7 @@ class Tabla extends Presa {
         $this->_strOpcion = $key;
         $this->arrNombresColumnas = $arrNombresColumnas;
         $this->intSkipVacios = $intSkipVacios;
+        $this->_boolRespuestaCastNum = $boolRespuestaCastNum;
     }
 
     public function duckTest($dom) {
@@ -73,7 +75,16 @@ class Tabla extends Presa {
             for ($i = $intInicioParsing; $i < count($textos); $i+=$intNumColumnas) {
                 $arrColumna = array();
                 for ($j = 0; $j < $intNumColumnas; $j++) {
-                    $arrColumna[$this->arrNombresColumnas[$j]] = $this->_limpiaStr($textos[$i + $j]->plaintext);
+                    $strTexto = $this->_limpiaStr($textos[$i + $j]->plaintext);
+                    if($this->_boolRespuestaCastNum) {
+                        if(is_numeric($strTexto)) {
+                            $arrColumna[$this->arrNombresColumnas[$j]] = (float)($strTexto);
+                        } else {
+                            $arrColumna[$this->arrNombresColumnas[$j]] = $strTexto;
+                        }
+                    } else {
+                        $arrColumna[$this->arrNombresColumnas[$j]] = ($strTexto);
+                    }
                 }
                 $arrRenglones[] = $arrColumna;
             }

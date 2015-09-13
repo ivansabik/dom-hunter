@@ -33,7 +33,7 @@ class DomHunter {
     public $arrPresas = array();
     public $arrNodosTexto;
 
-    public function __construct($strUrlObjetivo = '', $boolPost = FALSE, $boolRespuestaCastNum = TRUE) {
+    public function __construct($strUrlObjetivo = '', $boolPost = FALSE) {
         $this->strUrlObjetivo = $strUrlObjetivo;
         $this->boolPost = $boolPost;
     }
@@ -98,10 +98,7 @@ class DomHunter {
             # Hunt KeyValue
             elseif ($presa instanceof KeyValue) {
                 $pato = $presa->duckTest($this->arrNodosTexto);
-                if (is_numeric($pato) && $boolRespuestaCastNum) {
-                    $hunted[$strNombreResultado] = floatval($pato);
-                } 
-                else if($pato) {
+                if($pato) {
                     $hunted[$strNombreResultado] = $pato;
                 }
                 # Hunt NodoDom
